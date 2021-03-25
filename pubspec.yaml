@@ -1,0 +1,31 @@
+name: jugruppe
+description: A new Flutter project.
+publish_to: 'none' 
+version: 2.0.0+1
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Firebase
+  firebase_core: ^1.0.2
+  
+  cloud_firestore: ^1.0.2
+  
+  firebase_analytics: ^7.1.1
+  firebase_auth: ^1.0.1
+  
+  # firebase_crashlytics: ^1.0.0
+  firebase_performance: ^0.6.0
+
+  google_sign_in: ^5.0.1
+  provider: ^5.0.0
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
