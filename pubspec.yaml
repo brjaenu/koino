@@ -20,6 +20,7 @@ dependencies:
   firebase_performance: ^0.6.0
 
   google_sign_in: ^5.0.1
+  email_validator: ^2.0.1
   provider: ^5.0.0
 
   cupertino_icons: ^1.0.2
