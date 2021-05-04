@@ -2,41 +2,38 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jugruppe/auth/authentication_service.dart';
 import 'package:jugruppe/auth/authentication_wrapper.dart';
 import 'package:jugruppe/auth/signup_page.dart';
-import 'package:jugruppe/util/circularloading_widget.dart';
 import 'package:provider/provider.dart';
 
 FirebaseAnalytics analytics;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp();
+
+  // GoogleAnalytics
   analytics = FirebaseAnalytics();
+
+  // Crashlytics
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  // if (kDebugMode) {
+  if (!kDebugMode) {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+  }
   runApp(App());
 }
 
 class App extends StatelessWidget {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _initialization,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Something went wrong...'),
-            );
-          }
-
-          if (snapshot.connectionState == ConnectionState.done) {
-            return JuGruppeApp();
-          }
-
-          return CircularLoadingWidget();
-        });
+    return JuGruppeApp();
   }
 }
 
@@ -64,6 +61,7 @@ class JuGruppeApp extends StatelessWidget {
           primarySwatch: Colors.lightBlue,
         ),
         home: AuthenticationWrapper(),
+        debugShowCheckedModeBanner: false,
         navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
         routes: {
           AuthenticationWrapper.routeName: (ctx) => AuthenticationWrapper(),
