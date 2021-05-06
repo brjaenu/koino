@@ -1,14 +1,16 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:jugruppe/auth/authentication_service.dart';
-import 'package:jugruppe/auth/authentication_wrapper.dart';
-import 'package:jugruppe/auth/signup_page.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jugruppe/blocs/simple_bloc_observer.dart';
+import 'package:jugruppe/config/custom_router.dart';
+import 'package:jugruppe/repositories/auth/auth_repository.dart';
+import 'package:jugruppe/screens/splash_screen.dart';
+
+import 'blocs/auth/auth_bloc.dart';
 
 FirebaseAnalytics analytics;
 
@@ -27,6 +29,7 @@ void main() async {
   if (!kDebugMode) {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
   }
+  Bloc.observer = SimpleBlocObserver();
   runApp(App());
 }
 
@@ -39,34 +42,47 @@ class App extends StatelessWidget {
 
 class JuGruppeApp extends StatelessWidget {
   const JuGruppeApp({
-    Key key,
+    final Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return MultiRepositoryProvider(
       providers: [
-        Provider<AuthenticationService>(
-          create: (_) => AuthenticationService(FirebaseAuth.instance),
-        ),
-        StreamProvider(
-          create: (context) =>
-              context.read<AuthenticationService>().authStateChanges,
-          initialData: FirebaseAuth.instance.currentUser,
+        RepositoryProvider(
+          create: (_) => AuthRepository(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.lightBlue,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+                AuthBloc(authRepository: context.read<AuthRepository>()),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Jugruppe',
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              scaffoldBackgroundColor: Colors.grey[50],
+              appBarTheme: AppBarTheme(
+                brightness: Brightness.light,
+                color: Colors.white,
+                iconTheme: const IconThemeData(color: Colors.black),
+                textTheme: const TextTheme(
+                  headline6: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              visualDensity: VisualDensity.adaptivePlatformDensity),
+          onGenerateRoute: CustomRouter.onGenerateRoute,
+          initialRoute: SplashScreen.routeName,
+          debugShowCheckedModeBanner: false,
+          navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
         ),
-        home: AuthenticationWrapper(),
-        debugShowCheckedModeBanner: false,
-        navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
-        routes: {
-          AuthenticationWrapper.routeName: (ctx) => AuthenticationWrapper(),
-          SignUpPage.routeName: (ctx) => SignUpPage()
-        },
       ),
     );
   }
