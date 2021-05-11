@@ -1,0 +1,1 @@
+export 'package:jugruppe/widgets/error_dialog.dart';

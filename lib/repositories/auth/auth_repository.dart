@@ -22,8 +22,8 @@ class AuthRepository extends BaseAuthRepository {
   Future<auth.User> signUpWithEmailAndPassword(
       {@required String username,
       @required String email,
-      @required String firstname,
-      @required String lastname,
+      //@required String firstname,
+      //@required String lastname,
       @required String password}) async {
     try {
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -32,8 +32,8 @@ class AuthRepository extends BaseAuthRepository {
       _firebaseFirestore.collection(Paths.USERS).doc(user.uid).set({
         'email': email,
         'username': username,
-        'firstname': firstname,
-        'lastname': lastname
+        //'firstname': firstname,
+        //'lastname': lastname
       });
       return user;
     } on auth.FirebaseAuthException catch (err) {
@@ -47,7 +47,8 @@ class AuthRepository extends BaseAuthRepository {
   Future<auth.User> logInWithEmailAndPassword(
       {@required String email, @required String password}) async {
     try {
-      final credential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      final credential = await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
       return credential.user;
     } on auth.FirebaseAuthException catch (err) {
       throw Failure(code: err.code, message: err.message);
