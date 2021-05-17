@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jugruppe/repositories/repositories.dart';
 
 class NavScreen extends StatelessWidget {
   static const String routeName = '/nav';
@@ -14,7 +15,11 @@ class NavScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text('Nav Screen'),
-    );
+        body: Center(
+      child: ElevatedButton(
+        onPressed: () => AuthRepository().logOut(),
+        child: Text('Logout'),
+      ),
+    ));
   }
 }

@@ -25,6 +25,10 @@ class SignupCubit extends Cubit<SignupState> {
     emit(state.copyWith(password: value, status: SignupStatus.initial));
   }
 
+  void passwordRepeatChanged(String value) {
+    emit(state.copyWith(passwordRepeat: value, status: SignupStatus.initial));
+  }
+
   void signUpWithCredentials() async {
     if (!state.isFormValid || state.status == SignupStatus.submitting) return;
     try {

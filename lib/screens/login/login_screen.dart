@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jugruppe/repositories/auth/auth_repository.dart';
@@ -20,7 +21,9 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -64,24 +67,46 @@ class LoginScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 12.0),
                             TextFormField(
-                              decoration: InputDecoration(hintText: 'Email'),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(hintText: 'E-Mail'),
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.emailAddress,
+                              focusNode: _emailFocusNode,
                               onChanged: (value) => context
                                   .read<LoginCubit>()
                                   .emailChanged(value),
-                              validator: (value) => !value.contains('@')
-                                  ? 'Please enter a valid email.'
-                                  : null,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter a email.';
+                                }
+                                if (!EmailValidator.validate(value)) {
+                                  return 'Please enter a valid email.';
+                                }
+                                return null;
+                              },
                             ),
                             const SizedBox(height: 12.0),
                             TextFormField(
-                              decoration: InputDecoration(hintText: 'Password'),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               obscureText: true,
+                              decoration: InputDecoration(hintText: 'Password'),
                               onChanged: (value) => context
                                   .read<LoginCubit>()
                                   .passwordChanged(value),
-                              validator: (value) => value.length < 6
-                                  ? 'Password must be at least 6 charachters.'
-                                  : null,
+                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.text,
+                              focusNode: _passwordFocusNode,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter a password.';
+                                }
+                                if (value.toString().length < 8) {
+                                  return 'Please enter a password greater than 7 characters.';
+                                }
+                                return null;
+                              },
                             ),
                             const SizedBox(height: 28.0),
                             ElevatedButton(
@@ -118,8 +143,8 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  _submitForm(BuildContext context, bool isSubmnitting) {
-    if (_formKey.currentState.validate() && !isSubmnitting) {
+  _submitForm(BuildContext context, bool isSubmitting) {
+    if (_formKey.currentState.validate() && !isSubmitting) {
       context.read<LoginCubit>().logInWithCredentials();
     }
   }
