@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>811723911007-kpi5iou05fum1t230ectid0nvbr3c4d7.apps.googleusercontent.com</string>
+	<string>297920533060-c04p0kt1ji891k0n7p0dn1m24b0r3trg.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.811723911007-kpi5iou05fum1t230ectid0nvbr3c4d7</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>811723911007-58ef65inmhj83k2qovr3sg6ivh9b2sci.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.297920533060-c04p0kt1ji891k0n7p0dn1m24b0r3trg</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAv_jQchlPiHv3oadnYGuCDA7xlbzrNsgs</string>
+	<string>AIzaSyC3-bJemkzKugzfDjE6Z-GwFZbI74TXJac</string>
 	<key>GCM_SENDER_ID</key>
-	<string>811723911007</string>
+	<string>297920533060</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>ch.solit.jugruppe</string>
+	<string>ch.solit.koino</string>
 	<key>PROJECT_ID</key>
-	<string>jgapp-17a57</string>
+	<string>koino-d6c1d</string>
 	<key>STORAGE_BUCKET</key>
-	<string>jgapp-17a57.appspot.com</string>
+	<string>koino-d6c1d.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:811723911007:ios:b920a48bc4a9d4745890ea</string>
-	<key>DATABASE_URL</key>
-	<string>https://jgapp-17a57.firebaseio.com</string>
+	<string>1:297920533060:ios:1eef9437810be02e932211</string>
 </dict>
 </plist>

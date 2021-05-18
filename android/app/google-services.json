@@ -1,85 +1,40 @@
 {
   "project_info": {
-    "project_number": "811723911007",
-    "firebase_url": "https://jgapp-17a57.firebaseio.com",
-    "project_id": "jgapp-17a57",
-    "storage_bucket": "jgapp-17a57.appspot.com"
+    "project_number": "297920533060",
+    "project_id": "koino-d6c1d",
+    "storage_bucket": "koino-d6c1d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:811723911007:android:014b960469e96fb25890ea",
+        "mobilesdk_app_id": "1:297920533060:android:aa2312546d0b6c8b932211",
         "android_client_info": {
-          "package_name": "ch.etg.jugruppe"
+          "package_name": "ch.solit.koino"
         }
       },
       "oauth_client": [
         {
-          "client_id": "811723911007-58ef65inmhj83k2qovr3sg6ivh9b2sci.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ch.etg.jugruppe",
-            "certificate_hash": "fa1e86d611e8ac64a56d5c8be75860c3eec012cc"
-          }
-        },
-        {
-          "client_id": "811723911007-b3ku93kego2b2m6t895f96582d4lseh4.apps.googleusercontent.com",
+          "client_id": "297920533060-32jdnadfustpeqtt81o0rfir7vhul3ju.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDsrOQgFsFuOcAdXcoNdEay8o9QrPo7IrE"
+          "current_key": "AIzaSyDyKo21RdD5x1CV8LugzzOox1Jq6pQ4nes"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "811723911007-b3ku93kego2b2m6t895f96582d4lseh4.apps.googleusercontent.com",
+              "client_id": "297920533060-32jdnadfustpeqtt81o0rfir7vhul3ju.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "811723911007-3t12hq7u9ik6sm00397cfnid7rcvtr7d.apps.googleusercontent.com",
+              "client_id": "297920533060-c04p0kt1ji891k0n7p0dn1m24b0r3trg.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.jgApp"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:811723911007:android:e360968c2bbc35ff5890ea",
-        "android_client_info": {
-          "package_name": "ch.solit.jugruppe"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "811723911007-b3ku93kego2b2m6t895f96582d4lseh4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDsrOQgFsFuOcAdXcoNdEay8o9QrPo7IrE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "811723911007-b3ku93kego2b2m6t895f96582d4lseh4.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "811723911007-3t12hq7u9ik6sm00397cfnid7rcvtr7d.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.jgApp"
+                "bundle_id": "ch.solit.koino"
               }
             }
           ]
