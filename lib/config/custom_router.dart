@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jugruppe/screens/login/login_screen.dart';
-import 'package:jugruppe/screens/nav/nav_screen.dart';
-import 'package:jugruppe/screens/screens.dart';
-import 'package:jugruppe/screens/splash_screen.dart';
+import 'package:koino/screens/login/login_screen.dart';
+import 'package:koino/screens/nav/nav_screen.dart';
+import 'package:koino/screens/screens.dart';
+import 'package:koino/screens/splash_screen.dart';
 
 class CustomRouter {
   static Route onGenerateRoute(RouteSettings settings) {

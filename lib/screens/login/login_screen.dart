@@ -1,10 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jugruppe/repositories/auth/auth_repository.dart';
-import 'package:jugruppe/screens/login/cubit/login_cubit.dart';
-import 'package:jugruppe/screens/screens.dart';
-import 'package:jugruppe/widgets/error_dialog.dart';
+import 'package:koino/repositories/auth/auth_repository.dart';
+import 'package:koino/screens/login/cubit/login_cubit.dart';
+import 'package:koino/screens/screens.dart';
+import 'package:koino/widgets/error_dialog.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';

@@ -5,10 +5,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jugruppe/blocs/simple_bloc_observer.dart';
-import 'package:jugruppe/config/custom_router.dart';
-import 'package:jugruppe/repositories/auth/auth_repository.dart';
-import 'package:jugruppe/screens/splash_screen.dart';
+import 'package:koino/blocs/simple_bloc_observer.dart';
+import 'package:koino/config/custom_router.dart';
+import 'package:koino/repositories/auth/auth_repository.dart';
+import 'package:koino/screens/splash_screen.dart';
 
 import 'blocs/auth/auth_bloc.dart';
 

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:jugruppe/models/models.dart';
-import 'package:jugruppe/repositories/auth/auth_repository.dart';
+import 'package:koino/models/models.dart';
+import 'package:koino/repositories/auth/auth_repository.dart';
 
 part 'login_state.dart';
 

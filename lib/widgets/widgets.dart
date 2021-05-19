@@ -1,1 +1,1 @@
-export 'package:jugruppe/widgets/error_dialog.dart';
+export 'package:koino/widgets/error_dialog.dart';
