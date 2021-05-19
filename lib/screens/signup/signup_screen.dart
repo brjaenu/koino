@@ -1,9 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jugruppe/repositories/auth/auth_repository.dart';
-import 'package:jugruppe/screens/signup/cubit/signup_cubit.dart';
-import 'package:jugruppe/widgets/widgets.dart';
+import 'package:koino/repositories/auth/auth_repository.dart';
+import 'package:koino/screens/signup/cubit/signup_cubit.dart';
+import 'package:koino/widgets/widgets.dart';
 
 class SignupScreen extends StatelessWidget {
   static const String routeName = '/signup';

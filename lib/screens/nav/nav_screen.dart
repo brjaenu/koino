@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jugruppe/repositories/repositories.dart';
+import 'package:koino/repositories/repositories.dart';
 
 class NavScreen extends StatelessWidget {
   static const String routeName = '/nav';

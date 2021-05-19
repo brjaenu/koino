@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jugruppe/repositories/auth/base_auth_repository.dart';
-import 'package:jugruppe/models/models.dart';
-import 'package:jugruppe/util/paths.dart';
+import 'package:koino/repositories/auth/base_auth_repository.dart';
+import 'package:koino/models/models.dart';
+import 'package:koino/util/paths.dart';
 
 class AuthRepository extends BaseAuthRepository {
   final FirebaseFirestore _firebaseFirestore;
