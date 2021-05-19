@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +27,7 @@ void main() async {
   // Crashlytics
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   // if (kDebugMode) {
+  EquatableConfig.stringify = kDebugMode;
   if (!kDebugMode) {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
   }
@@ -47,7 +49,6 @@ class JuGruppeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
