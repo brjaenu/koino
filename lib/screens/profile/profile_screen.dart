@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:koino/repositories/auth/auth_repository.dart';
+import 'package:koino/screens/nav/widgets/widgets.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const String routeName = '/profile';
@@ -7,6 +8,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        title: 'PROFILE',
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

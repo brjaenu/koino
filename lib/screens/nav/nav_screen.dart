@@ -39,15 +39,6 @@ class NavScreen extends StatelessWidget {
       child: BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
         builder: (context, state) {
           return Scaffold(
-            bottomNavigationBar: BottomNavBar(
-              items: items,
-              selectedItem: state.selectedItem,
-              onTap: (i) {
-                final selectedItem = BottomNavItem.values[i];
-                _selectBottomNavItem(
-                    context, selectedItem, selectedItem == state.selectedItem);
-              },
-            ),
             body: Stack(
               children: items
                   .map((item, _) => MapEntry(
@@ -57,6 +48,15 @@ class NavScreen extends StatelessWidget {
                       ))
                   .values
                   .toList(),
+            ),
+            bottomNavigationBar: BottomNavBar(
+              items: items,
+              selectedItem: state.selectedItem,
+              onTap: (i) {
+                final selectedItem = BottomNavItem.values[i];
+                _selectBottomNavItem(
+                    context, selectedItem, selectedItem == state.selectedItem);
+              },
             ),
           );
         },
