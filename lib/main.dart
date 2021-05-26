@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koino/blocs/simple_bloc_observer.dart';
 import 'package:koino/config/custom_router.dart';
-import 'package:koino/repositories/auth/auth_repository.dart';
 import 'package:koino/repositories/repositories.dart';
 import 'package:koino/screens/splash_screen.dart';
 
