@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:koino/blocs/auth/auth_bloc.dart';
 import 'package:koino/enums/enums.dart';
+import 'package:koino/repositories/repositories.dart';
 import 'package:koino/screens/nav/cubit/bottom_nav_bar_cubit.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
+import 'package:koino/screens/profile/bloc/profile_bloc.dart';
+import 'package:koino/widgets/widgets.dart';
 
 class NavScreen extends StatelessWidget {
   static const String routeName = '/nav';
@@ -11,8 +15,18 @@ class NavScreen extends StatelessWidget {
     return PageRouteBuilder(
       settings: const RouteSettings(name: routeName),
       transitionDuration: const Duration(seconds: 0),
-      pageBuilder: (_, __, ___) => BlocProvider<BottomNavBarCubit>(
-        create: (_) => BottomNavBarCubit(),
+      pageBuilder: (_, __, ___) => MultiBlocProvider(
+        providers: [
+          BlocProvider<BottomNavBarCubit>(
+            create: (_) => BottomNavBarCubit(),
+          ),
+          BlocProvider<ProfileBloc>(
+            create: (context) => ProfileBloc(
+              userRepository: context.read<UserRepository>(),
+            )..add(ProfileLoadUser(
+                userId: context.read<AuthBloc>().state.user.uid)),
+          ),
+        ],
         child: NavScreen(),
       ),
     );
@@ -36,28 +50,40 @@ class NavScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
+      child: BlocConsumer<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state.status == ProfileStatus.failure) {
+            showDialog(
+              context: context,
+              builder: (context) => ErrorDialog(content: state.failure.message),
+            );
+          }
+        },
         builder: (context, state) {
-          return Scaffold(
-            body: Stack(
-              children: items
-                  .map((item, _) => MapEntry(
-                        item,
-                        _buildOffstageNavigator(
-                            item, item == state.selectedItem),
-                      ))
-                  .values
-                  .toList(),
-            ),
-            bottomNavigationBar: BottomNavBar(
-              items: items,
-              selectedItem: state.selectedItem,
-              onTap: (i) {
-                final selectedItem = BottomNavItem.values[i];
-                _selectBottomNavItem(
-                    context, selectedItem, selectedItem == state.selectedItem);
-              },
-            ),
+          return BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
+            builder: (context, state) {
+              return Scaffold(
+                body: Stack(
+                  children: items
+                      .map((item, _) => MapEntry(
+                            item,
+                            _buildOffstageNavigator(
+                                item, item == state.selectedItem),
+                          ))
+                      .values
+                      .toList(),
+                ),
+                bottomNavigationBar: BottomNavBar(
+                  items: items,
+                  selectedItem: state.selectedItem,
+                  onTap: (i) {
+                    final selectedItem = BottomNavItem.values[i];
+                    _selectBottomNavItem(context, selectedItem,
+                        selectedItem == state.selectedItem);
+                  },
+                ),
+              );
+            },
           );
         },
       ),
