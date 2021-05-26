@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:koino/blocs/user/user_bloc.dart';
 import 'package:koino/repositories/auth/auth_repository.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
 
@@ -7,6 +9,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<UserBloc>().state.user;
+
     return Scaffold(
       appBar: CustomAppBar(
         title: 'PROFILE',
@@ -15,6 +19,7 @@ class ProfileScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Text(user.email),
           Center(
             child: Text('Profile'),
           ),
