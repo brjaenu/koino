@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:koino/blocs/auth/auth_bloc.dart';
+import 'package:koino/blocs/blocs.dart';
 import 'package:koino/enums/enums.dart';
 import 'package:koino/repositories/repositories.dart';
 import 'package:koino/screens/nav/cubit/bottom_nav_bar_cubit.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
-import 'package:koino/screens/profile/bloc/profile_bloc.dart';
 import 'package:koino/widgets/widgets.dart';
 
 class NavScreen extends StatelessWidget {
@@ -20,11 +19,10 @@ class NavScreen extends StatelessWidget {
           BlocProvider<BottomNavBarCubit>(
             create: (_) => BottomNavBarCubit(),
           ),
-          BlocProvider<ProfileBloc>(
-            create: (context) => ProfileBloc(
+          BlocProvider<UserBloc>(
+            create: (context) => UserBloc(
               userRepository: context.read<UserRepository>(),
-            )..add(ProfileLoadUser(
-                userId: context.read<AuthBloc>().state.user.uid)),
+            )..add(LoadUser(userId: context.read<AuthBloc>().state.user.uid)),
           ),
         ],
         child: NavScreen(),
@@ -50,9 +48,9 @@ class NavScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: BlocConsumer<ProfileBloc, ProfileState>(
+      child: BlocConsumer<UserBloc, UserState>(
         listener: (context, state) {
-          if (state.status == ProfileStatus.failure) {
+          if (state.status == UserStatus.failure) {
             showDialog(
               context: context,
               builder: (context) => ErrorDialog(content: state.failure.message),

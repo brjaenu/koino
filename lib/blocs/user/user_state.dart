@@ -1,22 +1,22 @@
-part of 'profile_bloc.dart';
+part of 'user_bloc.dart';
 
-enum ProfileStatus { initial, loading, loaded, failure }
+enum UserStatus { initial, loading, loaded, failure }
 
-class ProfileState extends Equatable {
+class UserState extends Equatable {
   final User user;
-  final ProfileStatus status;
+  final UserStatus status;
   final Failure failure;
 
-  const ProfileState({
+  const UserState({
     @required this.user,
     @required this.status,
     @required this.failure,
   });
 
-  factory ProfileState.initial() {
-    return ProfileState(
+  factory UserState.initial() {
+    return UserState(
       user: User.empty,
-      status: ProfileStatus.initial,
+      status: UserStatus.initial,
       failure: Failure(),
     );
   }
@@ -28,12 +28,12 @@ class ProfileState extends Equatable {
         failure,
       ];
 
-  ProfileState copyWith({
+  UserState copyWith({
     User user,
-    ProfileStatus status,
+    UserStatus status,
     Failure failure,
   }) {
-    return ProfileState(
+    return UserState(
       user: user ?? this.user,
       status: status ?? this.status,
       failure: failure ?? this.failure,
