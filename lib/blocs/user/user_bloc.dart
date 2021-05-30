@@ -36,7 +36,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } catch (err) {
       yield state.copyWith(
         status: UserStatus.failure,
-        failure: const Failure(message: 'We were unable to load this user'),
+        failure: const Failure(message: 'Unable to load this user'),
       );
     }
   }

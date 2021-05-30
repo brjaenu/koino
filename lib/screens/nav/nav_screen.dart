@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/enums/enums.dart';
+import 'package:koino/repositories/group/group_repository.dart';
 import 'package:koino/repositories/repositories.dart';
 import 'package:koino/screens/nav/cubit/bottom_nav_bar_cubit.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
@@ -23,6 +24,12 @@ class NavScreen extends StatelessWidget {
             create: (context) => UserBloc(
               userRepository: context.read<UserRepository>(),
             )..add(LoadUser(userId: context.read<AuthBloc>().state.user.uid)),
+          ),
+          BlocProvider<GroupBloc>(
+            create: (context) => GroupBloc(
+              groupRepository: context.read<GroupRepository>(),
+            )..add(LoadUserGroups(
+                userId: context.read<AuthBloc>().state.user.uid)),
           ),
         ],
         child: NavScreen(),
@@ -48,42 +55,50 @@ class NavScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: BlocConsumer<UserBloc, UserState>(
-        listener: (context, state) {
-          if (state.status == UserStatus.failure) {
-            showDialog(
-              context: context,
-              builder: (context) => ErrorDialog(content: state.failure.message),
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<UserBloc, UserState>(listener: (context, state) {
+            if (state.status == UserStatus.failure) {
+              showDialog(
+                  context: context,
+                  builder: (context) =>
+                      ErrorDialog(content: state.failure.message));
+            }
+          }),
+          BlocListener<GroupBloc, GroupState>(listener: (context, state) {
+            if (state.status == GroupStatus.failure) {
+              showDialog(
+                  context: context,
+                  builder: (context) =>
+                      ErrorDialog(content: state.failure.message));
+            }
+          }),
+        ],
+        child: BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
+          builder: (context, state) {
+            return Scaffold(
+              body: Stack(
+                children: items
+                    .map((item, _) => MapEntry(
+                          item,
+                          _buildOffstageNavigator(
+                              item, item == state.selectedItem),
+                        ))
+                    .values
+                    .toList(),
+              ),
+              bottomNavigationBar: BottomNavBar(
+                items: items,
+                selectedItem: state.selectedItem,
+                onTap: (i) {
+                  final selectedItem = BottomNavItem.values[i];
+                  _selectBottomNavItem(context, selectedItem,
+                      selectedItem == state.selectedItem);
+                },
+              ),
             );
-          }
-        },
-        builder: (context, state) {
-          return BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
-            builder: (context, state) {
-              return Scaffold(
-                body: Stack(
-                  children: items
-                      .map((item, _) => MapEntry(
-                            item,
-                            _buildOffstageNavigator(
-                                item, item == state.selectedItem),
-                          ))
-                      .values
-                      .toList(),
-                ),
-                bottomNavigationBar: BottomNavBar(
-                  items: items,
-                  selectedItem: state.selectedItem,
-                  onTap: (i) {
-                    final selectedItem = BottomNavItem.values[i];
-                    _selectBottomNavItem(context, selectedItem,
-                        selectedItem == state.selectedItem);
-                  },
-                ),
-              );
-            },
-          );
-        },
+          },
+        ),
       ),
     );
   }
