@@ -23,13 +23,8 @@ class NavScreen extends StatelessWidget {
           BlocProvider<UserBloc>(
             create: (context) => UserBloc(
               userRepository: context.read<UserRepository>(),
-            )..add(LoadUser(userId: context.read<AuthBloc>().state.user.uid)),
-          ),
-          BlocProvider<GroupBloc>(
-            create: (context) => GroupBloc(
               groupRepository: context.read<GroupRepository>(),
-            )..add(LoadUserGroups(
-                userId: context.read<AuthBloc>().state.user.uid)),
+            )..add(LoadUser(userId: context.read<AuthBloc>().state.user.uid)),
           ),
         ],
         child: NavScreen(),
@@ -65,14 +60,6 @@ class NavScreen extends StatelessWidget {
                       ErrorDialog(content: state.failure.message));
             }
           }),
-          BlocListener<GroupBloc, GroupState>(listener: (context, state) {
-            if (state.status == GroupStatus.failure) {
-              showDialog(
-                  context: context,
-                  builder: (context) =>
-                      ErrorDialog(content: state.failure.message));
-            }
-          }),
         ],
         child: BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
           builder: (context, state) {
@@ -87,15 +74,7 @@ class NavScreen extends StatelessWidget {
                     .values
                     .toList(),
               ),
-              bottomNavigationBar: BottomNavBar(
-                items: items,
-                selectedItem: state.selectedItem,
-                onTap: (i) {
-                  final selectedItem = BottomNavItem.values[i];
-                  _selectBottomNavItem(context, selectedItem,
-                      selectedItem == state.selectedItem);
-                },
-              ),
+              bottomNavigationBar: _buildBottomNavBar(context, state),
             );
           },
         ),
@@ -111,6 +90,22 @@ class NavScreen extends StatelessWidget {
           .popUntil((route) => route.isFirst);
     }
     context.read<BottomNavBarCubit>().updateSelectedItem(selectedItem);
+  }
+
+  Widget _buildBottomNavBar(BuildContext context, BottomNavBarState state) {
+    if (!state.isVisible) {
+      return null;
+    }
+
+    return BottomNavBar(
+      items: items,
+      selectedItem: state.selectedItem,
+      onTap: (i) {
+        final selectedItem = BottomNavItem.values[i];
+        _selectBottomNavItem(
+            context, selectedItem, selectedItem == state.selectedItem);
+      },
+    );
   }
 
   Widget _buildOffstageNavigator(BottomNavItem currentItem, bool isSelected) {

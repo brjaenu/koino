@@ -45,7 +45,7 @@ class TabNavigator extends StatelessWidget {
       case BottomNavItem.prayerwall:
         return PrayerwallScreen();
       case BottomNavItem.group:
-        return GroupScreen();
+        return ManageGroupScreen();
       case BottomNavItem.profile:
         return ProfileScreen();
       default:

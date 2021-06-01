@@ -15,3 +15,14 @@ class LoadUser extends UserEvent {
   @override
   List<Object> get props => [userId];
 }
+
+class UserUpdateGroups extends UserEvent {
+  final List<Group> groups;
+
+  UserUpdateGroups({
+    @required this.groups,
+  });
+
+  @override
+  List<Object> get props => [groups];
+}

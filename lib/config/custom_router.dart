@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:koino/screens/groups/groups_screen.dart';
 import 'package:koino/screens/login/login_screen.dart';
 import 'package:koino/screens/nav/nav_screen.dart';
 import 'package:koino/screens/screens.dart';
@@ -27,6 +28,8 @@ class CustomRouter {
 
   static Route onGenerateNestedRoute(RouteSettings settings) {
     switch (settings.name) {
+      case GroupsScreen.routeName:
+        return GroupsScreen.route();
       default:
         return _errorRoute();
     }

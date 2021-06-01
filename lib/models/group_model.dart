@@ -8,30 +8,20 @@ class Group extends Equatable {
   final String id;
   final String name;
   final User owner;
-  final int memberAmount;
-  final List<User> members;
 
   const Group({
     this.id,
     @required this.name,
     @required this.owner,
-    @required this.memberAmount,
-    @required this.members,
   });
 
   static const empty =
-      Group(id: '', name: '', owner: User.empty, memberAmount: 0, members: []);
+      Group(id: '', name: '', owner: User.empty);
 
   Map<String, dynamic> toDocument() {
     return {
       'name': this.name,
       'owner': FirebaseFirestore.instance.collection(Paths.USERS).doc(owner.id),
-      'memberAmount': this.memberAmount,
-      'members': this
-          .members
-          .map((user) =>
-              FirebaseFirestore.instance.collection(Paths.USERS).doc(user.id))
-          .toList(),
     };
   }
 
@@ -40,22 +30,13 @@ class Group extends Equatable {
     final data = doc.data() as Map;
     final ownerRef = data['owner'] as DocumentReference;
 
-    final List<DocumentReference> membersRefs = (data['members'] as List<dynamic>).map<DocumentReference>((r) => r).toList();
-
-    if (ownerRef != null && membersRefs != null) {
+    if (ownerRef != null ) {
       final ownerDoc = await ownerRef.get();
-      final memberDocs =
-          await Future.wait(membersRefs.map((memberRef) => memberRef.get()).toList());
-
-      if (ownerDoc != null && memberDocs != null) {
+      if (ownerDoc != null) {
         return Group(
           id: doc.id,
           name: data['name'] ?? '',
           owner: User.fromDocument(ownerDoc),
-          memberAmount: (data['memberAmount'] ?? 0).toInt(),
-          members: await memberDocs
-              .map((memberDoc) => User.fromDocument(memberDoc))
-              .toList(),
         );
       }
     }
@@ -66,8 +47,6 @@ class Group extends Equatable {
   List<Object> get props => [
         id,
         name,
-        memberAmount,
-        members,
       ];
 
   Group copyWith({
@@ -81,8 +60,6 @@ class Group extends Equatable {
       id: id ?? this.id,
       name: name ?? this.name,
       owner: owner ?? this.owner,
-      memberAmount: memberAmount ?? this.memberAmount,
-      members: members ?? this.members,
     );
   }
 }
