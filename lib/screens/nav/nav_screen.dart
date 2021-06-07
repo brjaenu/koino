@@ -50,39 +50,41 @@ class NavScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<UserBloc, UserState>(listener: (context, state) {
-            if (state.status == UserStatus.failure) {
-              showDialog(
-                  context: context,
-                  builder: (context) =>
-                      ErrorDialog(content: state.failure.message));
-            } else if (state.status == UserStatus.loading) {
-              // TODO: Not working change to Consumer
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
-        ],
-        child: BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
-          builder: (context, state) {
+      child: BlocConsumer<UserBloc, UserState>(
+        listener: (context, state) {
+          if (state.status == UserStatus.failure) {
+            showDialog(
+                context: context,
+                builder: (context) =>
+                    ErrorDialog(content: state.failure.message));
+          }
+        },
+        builder: (context, state) {
+          if (state.status == UserStatus.loading) {
             return Scaffold(
-              body: Stack(
-                children: items
-                    .map((item, _) => MapEntry(
-                          item,
-                          _buildOffstageNavigator(
-                              item, item == state.selectedItem),
-                        ))
-                    .values
-                    .toList(),
+              body: Center(
+                child: CircularProgressIndicator(),
               ),
-              bottomNavigationBar: _buildBottomNavBar(context, state),
             );
-          },
-        ),
+          }
+          return BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
+            builder: (context, state) {
+              return Scaffold(
+                body: Stack(
+                  children: items
+                      .map((item, _) => MapEntry(
+                            item,
+                            _buildOffstageNavigator(
+                                item, item == state.selectedItem),
+                          ))
+                      .values
+                      .toList(),
+                ),
+                bottomNavigationBar: _buildBottomNavBar(context, state),
+              );
+            },
+          );
+        },
       ),
     );
   }
