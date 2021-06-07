@@ -35,6 +35,7 @@ class UserState extends Equatable {
   UserState copyWith({
     User user,
     List<Group> groups,
+    Group activeGroup,
     UserStatus status,
     Failure failure,
   }) {

@@ -2,64 +2,52 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:koino/models/user_model.dart';
-import 'package:koino/util/paths.dart';
 
 class Group extends Equatable {
   final String id;
   final String name;
-  final User owner;
+  final String ownerId;
 
   const Group({
     this.id,
     @required this.name,
-    @required this.owner,
+    @required this.ownerId,
   });
 
-  static const empty =
-      Group(id: '', name: '', owner: User.empty);
+  static const empty = Group(id: '', name: '', ownerId: '');
 
   Map<String, dynamic> toDocument() {
     return {
       'name': this.name,
-      'owner': FirebaseFirestore.instance.collection(Paths.USERS).doc(owner.id),
+      'ownerId': ownerId,
     };
   }
 
-  static Future<Group> fromDocument(DocumentSnapshot doc) async {
+  factory Group.fromDocument(DocumentSnapshot doc) {
     if (doc == null) return null;
     final data = doc.data() as Map;
-    final ownerRef = data['owner'] as DocumentReference;
 
-    if (ownerRef != null ) {
-      final ownerDoc = await ownerRef.get();
-      if (ownerDoc != null) {
-        return Group(
-          id: doc.id,
-          name: data['name'] ?? '',
-          owner: User.fromDocument(ownerDoc),
-        );
-      }
-    }
-    return null;
+    return Group(
+      id: doc.id,
+      name: data['name'] ?? '',
+      ownerId: data['ownerId'] ?? '',
+    );
   }
 
   @override
-  List<Object> get props => [
-        id,
-        name,
-      ];
+  List<Object> get props => [id, name, ownerId];
 
   Group copyWith({
     String id,
     String name,
-    User owner,
+    String ownerId,
     int memberAmount,
     List<User> members,
   }) {
     return Group(
       id: id ?? this.id,
       name: name ?? this.name,
-      owner: owner ?? this.owner,
+      ownerId: ownerId ?? this.ownerId,
     );
   }
 }

@@ -18,7 +18,7 @@ class GroupRepository extends BaseGroupRepository {
   }
 
   @override
-  Stream<List<Future<Group>>> findByUserId({String userId}) {
+  Stream<List<Group>> findByUserId({String userId}) {
     final userRef = _firebaseFirestore.collection(Paths.USERS).doc(userId);
     return _firebaseFirestore
         .collection(Paths.GROUPS)
@@ -26,5 +26,13 @@ class GroupRepository extends BaseGroupRepository {
         .snapshots()
         .map(
             (snap) => snap.docs.map((doc) => Group.fromDocument(doc)).toList());
+  }
+
+  @override
+  Future<Group> findActiveGroupByUserId({String userId}) async {
+    final doc =
+        await _firebaseFirestore.collection(Paths.USERS).doc(userId).get();
+    final User user = doc.exists ? User.fromDocument(doc) : User.empty;
+    return user.activeGroup != null ? findById(id: user.activeGroup.id) : null;
   }
 }

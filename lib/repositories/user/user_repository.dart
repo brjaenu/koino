@@ -15,4 +15,16 @@ class UserRepository extends BaseUserRepository {
     final doc = await _firebaseFirestore.collection(Paths.USERS).doc(id).get();
     return doc.exists ? User.fromDocument(doc) : User.empty;
   }
+
+  @override
+  Future<void> updateActiveGroup({
+    @required String userId,
+    @required String groupId,
+  }) async {
+    final groupRef = _firebaseFirestore.collection(Paths.GROUPS).doc(groupId);
+    return _firebaseFirestore
+        .collection(Paths.USERS)
+        .doc(userId)
+        .update({'activeGroup': groupRef});
+  }
 }

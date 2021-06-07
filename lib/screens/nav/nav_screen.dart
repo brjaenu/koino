@@ -58,6 +58,11 @@ class NavScreen extends StatelessWidget {
                   context: context,
                   builder: (context) =>
                       ErrorDialog(content: state.failure.message));
+            } else if (state.status == UserStatus.loading) {
+              // TODO: Not working change to Consumer
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
           }),
         ],

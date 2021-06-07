@@ -26,3 +26,14 @@ class UserUpdateGroups extends UserEvent {
   @override
   List<Object> get props => [groups];
 }
+
+class UserUpdateActiveGroup extends UserEvent {
+  final Group group;
+
+  UserUpdateActiveGroup({
+    @required this.group,
+  });
+
+  @override
+  List<Object> get props => [group];
+}

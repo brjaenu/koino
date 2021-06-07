@@ -14,7 +14,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final UserRepository _userRepository;
   final GroupRepository _groupRepository;
 
-  StreamSubscription<List<Future<Group>>> _groupsSubscription;
+  StreamSubscription<List<Group>> _groupsSubscription;
 
   UserBloc({
     @required UserRepository userRepository,
@@ -37,6 +37,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapLoadUserToState(event);
     } else if (event is UserUpdateGroups) {
       yield* _mapUserUpdateGroupsToState(event);
+    } else if (event is UserUpdateActiveGroup) {
+      yield* _mapUserUpdateActiveGroup(event);
     }
   }
 
@@ -49,7 +51,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       _groupsSubscription = _groupRepository
           .findByUserId(userId: event.userId)
           .listen((groupsFuture) async {
-        final userGroups = await Future.wait(groupsFuture);
+        final userGroups = groupsFuture;
         add(UserUpdateGroups(groups: userGroups));
       });
 
@@ -69,5 +71,29 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     yield state.copyWith(
       groups: event.groups,
     );
+  }
+
+  Stream<UserState> _mapUserUpdateActiveGroup(
+      UserUpdateActiveGroup event) async* {
+    yield state.copyWith(status: UserStatus.loading);
+
+    try {
+      await _userRepository.updateActiveGroup(
+        userId: state.user.id,
+        groupId: event.group.id,
+      );
+
+      yield state.copyWith(
+        user: state.user.copyWith(
+          activeGroup: event.group,
+        ),
+        status: UserStatus.loaded,
+      );
+    } catch (err) {
+      yield state.copyWith(
+        status: UserStatus.failure,
+        failure: const Failure(message: 'Unable to update active group'),
+      );
+    }
   }
 }

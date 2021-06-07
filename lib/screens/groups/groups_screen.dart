@@ -18,26 +18,34 @@ class GroupsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final groups = context.read<UserBloc>().state.groups;
-    const List<IconData> icons = const [Icons.add, Icons.vpn_key_rounded];
+    Map<IconData, Function> icons = {
+      Icons.add: _navigateCreateGroupPage,
+      Icons.vpn_key_rounded: _showActivationSheet,
+    };
     return WillPopScope(
-      onWillPop: () async => _willPopCallback(context),
+      onWillPop: () async => _popGroupsRoute(context),
       child: Scaffold(
         appBar: AppBar(
           title: Text('GRUPPEN AUSWAHL'),
         ),
-        body: _buildGroupList(groups),
+        body: _buildGroupList(groups, context),
         floatingActionButton: CustomFABGroup(icons: icons),
       ),
     );
   }
 
-  Widget _buildGroupList(List<Group> groups) {
+  Widget _buildGroupList(List<Group> groups, BuildContext context) {
     return ListView.separated(
       itemBuilder: (ctx, i) {
         return ListTile(
           title: Text(groups[i].name),
           trailing: Icon(Icons.keyboard_arrow_right_outlined),
-          onTap: () {},
+          onTap: () {
+            context
+                .read<UserBloc>()
+                .add(UserUpdateActiveGroup(group: groups[i]));
+            _popGroupsRoute(context);
+          },
         );
       },
       separatorBuilder: (ctx, i) {
@@ -49,7 +57,17 @@ class GroupsScreen extends StatelessWidget {
     );
   }
 
-  Future<bool> _willPopCallback(BuildContext context) async {
+  void _showActivationSheet() {
+    // TODO: Implement activate group
+    print('Show activation sheet');
+  }
+
+  void _navigateCreateGroupPage() {
+    // TODO: Implement create group
+    print('navigate create group');
+  }
+
+  Future<bool> _popGroupsRoute(BuildContext context) async {
     context.read<BottomNavBarCubit>().updateNavBarVisibility(isVisible: true);
     Navigator.of(context).pop();
     return Future.value(true);

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class CustomFABGroup extends StatefulWidget {
-  final List<IconData> _icons;
-  const CustomFABGroup({Key key, List<IconData> icons})
+  final Map<IconData, Function> _icons;
+  const CustomFABGroup({Key key, Map<IconData, Function> icons})
       : _icons = icons,
         super(key: key);
 
@@ -30,6 +30,7 @@ class _CustomFABGroupState extends State<CustomFABGroup>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: new List.generate(icons.length, (int index) {
+        var entry = icons.entries.elementAt(index);
         Widget child = new Container(
           height: 60.0,
           width: 100.0,
@@ -43,8 +44,11 @@ class _CustomFABGroupState extends State<CustomFABGroup>
             child: new FloatingActionButton(
               heroTag: null,
               mini: true,
-              child: new Icon(icons[index]),
-              onPressed: () {},
+              child: new Icon(entry.key),
+              onPressed: () {
+                entry.value();
+                _controller.reverse();
+              },
             ),
           ),
         );
