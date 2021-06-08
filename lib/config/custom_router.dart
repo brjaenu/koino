@@ -30,6 +30,8 @@ class CustomRouter {
     switch (settings.name) {
       case GroupsScreen.routeName:
         return GroupsScreen.route();
+      case CreateGroupScreen.routeName:
+        return CreateGroupScreen.route();
       default:
         return _errorRoute();
     }

@@ -1,25 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:koino/models/user_model.dart';
 
 class Group extends Equatable {
   final String id;
   final String name;
   final String ownerId;
+  final String activationCode;
 
   const Group({
     this.id,
     @required this.name,
     @required this.ownerId,
+    @required this.activationCode,
   });
 
-  static const empty = Group(id: '', name: '', ownerId: '');
+  static const empty = Group(id: '', name: '', ownerId: '', activationCode: '');
 
   Map<String, dynamic> toDocument() {
     return {
       'name': this.name,
       'ownerId': ownerId,
+      'activationCode': activationCode,
     };
   }
 
@@ -31,23 +33,24 @@ class Group extends Equatable {
       id: doc.id,
       name: data['name'] ?? '',
       ownerId: data['ownerId'] ?? '',
+      activationCode: data['activationCode'] ?? '',
     );
   }
 
   @override
-  List<Object> get props => [id, name, ownerId];
+  List<Object> get props => [id, name, ownerId, activationCode];
 
   Group copyWith({
     String id,
     String name,
     String ownerId,
-    int memberAmount,
-    List<User> members,
+    String activationCode,
   }) {
     return Group(
       id: id ?? this.id,
       name: name ?? this.name,
       ownerId: ownerId ?? this.ownerId,
+      activationCode: activationCode ?? activationCode,
     );
   }
 }

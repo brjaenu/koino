@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:koino/models/models.dart';
 import 'package:koino/util/paths.dart';
 
@@ -10,12 +9,6 @@ class GroupRepository extends BaseGroupRepository {
 
   GroupRepository({FirebaseFirestore firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
-
-  @override
-  Future<Group> findById({@required String id}) async {
-    final doc = await _firebaseFirestore.collection(Paths.GROUPS).doc(id).get();
-    return doc.exists ? Group.fromDocument(doc) : Group.empty;
-  }
 
   @override
   Stream<List<Group>> findByUserId({String userId}) {
@@ -29,10 +22,17 @@ class GroupRepository extends BaseGroupRepository {
   }
 
   @override
-  Future<Group> findActiveGroupByUserId({String userId}) async {
-    final doc =
-        await _firebaseFirestore.collection(Paths.USERS).doc(userId).get();
-    final User user = doc.exists ? User.fromDocument(doc) : User.empty;
-    return user.activeGroup != null ? findById(id: user.activeGroup.id) : null;
+  Future<Group> create(
+      {String name, String activationCode, String ownerId}) async {
+    final userRef = _firebaseFirestore.collection(Paths.USERS).doc(ownerId);
+    final groupRef = await _firebaseFirestore.collection(Paths.GROUPS).add({
+      'name': name,
+      'activationCode': activationCode,
+      'owner': userRef,
+      'members': [userRef],
+      'memberAmount': 1,
+    });
+    final doc = await groupRef.get();
+    return doc.exists ? Group.fromDocument(doc) : Group.empty;
   }
 }

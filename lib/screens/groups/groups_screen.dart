@@ -4,6 +4,7 @@ import 'package:koino/blocs/blocs.dart';
 import 'package:koino/models/models.dart';
 import 'package:koino/screens/nav/cubit/bottom_nav_bar_cubit.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
+import 'package:koino/screens/screens.dart';
 
 class GroupsScreen extends StatelessWidget {
   static const String routeName = '/groups';
@@ -62,9 +63,8 @@ class GroupsScreen extends StatelessWidget {
     print('Show activation sheet');
   }
 
-  void _navigateCreateGroupPage() {
-    // TODO: Implement create group
-    print('navigate create group');
+  void _navigateCreateGroupPage(BuildContext context) {
+    Navigator.of(context).pushNamed(CreateGroupScreen.routeName);
   }
 
   Future<bool> _popGroupsRoute(BuildContext context) async {

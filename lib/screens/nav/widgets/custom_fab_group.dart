@@ -46,7 +46,7 @@ class _CustomFABGroupState extends State<CustomFABGroup>
               mini: true,
               child: new Icon(entry.key),
               onPressed: () {
-                entry.value();
+                entry.value(context);
                 _controller.reverse();
               },
             ),

@@ -7,3 +7,4 @@ export 'package:koino/screens/prayerwall/prayerwall_screen.dart';
 export 'package:koino/screens/manage_group/manage_group_screen.dart';
 export 'package:koino/screens/profile/profile_screen.dart';
 export 'package:koino/screens/groups/groups_screen.dart';
+export 'package:koino/screens/create_group/create_group_screen.dart';
