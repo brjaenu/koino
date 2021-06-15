@@ -2,55 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/models/models.dart';
-import 'package:koino/repositories/group/group_repository.dart';
-import 'package:koino/screens/create_group/cubit/create_group_cubit.dart';
+import 'package:koino/screens/groups/cubit/join_group_cubit.dart';
 import 'package:koino/screens/nav/cubit/bottom_nav_bar_cubit.dart';
 import 'package:koino/widgets/widgets.dart';
 
-class CreateGroupScreen extends StatelessWidget {
-  static const String routeName = '/create-group';
+class JoinGroupSheet extends StatelessWidget {
+  final GlobalKey<FormState> _formKey;
 
-  static Route route() {
-    return MaterialPageRoute(
-      settings: const RouteSettings(name: routeName),
-      builder: (context) => BlocProvider<CreateGroupCubit>(
-        create: (_) => CreateGroupCubit(
-          groupRepository: context.read<GroupRepository>(),
-        ),
-        child: CreateGroupScreen(),
-      ),
-    );
-  }
+  JoinGroupSheet({
+    Key key,
+    @required GlobalKey<FormState> formKey,
+  })  : _formKey = formKey,
+        super(key: key);
 
-  final _formKey = GlobalKey<FormState>();
   final _nameFocusNode = FocusNode();
   final _activationCodeFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: BlocConsumer<CreateGroupCubit, CreateGroupState>(
-        listener: (context, state) {
-          if (state.status == CreateGroupStatus.error) {
-            showDialog(
-              context: context,
-              builder: (context) => ErrorDialog(content: state.failure.message),
-            );
-          }
-        },
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('GRUPPE - ERSTELLEN'),
-            ),
-            body: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: ListView(
-                  children: [
-                    Form(
-                      key: _formKey,
+    return BlocConsumer<JoinGroupCubit, JoinGroupState>(
+      listener: (context, state) {
+        if (state.status == JoinGroupStatus.error) {
+          showDialog(
+            context: context,
+            builder: (context) => ErrorDialog(content: state.failure.message),
+          );
+        }
+      },
+      builder: (context, state) {
+        return SingleChildScrollView(
+          child: Container(
+            child: Wrap(
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Form(
+                      key: this._formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -65,7 +53,7 @@ class CreateGroupScreen extends StatelessWidget {
                             keyboardType: TextInputType.name,
                             focusNode: _nameFocusNode,
                             onChanged: (value) => context
-                                .read<CreateGroupCubit>()
+                                .read<JoinGroupCubit>()
                                 .nameChanged(value),
                             validator: (value) {
                               if (value.isEmpty) {
@@ -84,7 +72,7 @@ class CreateGroupScreen extends StatelessWidget {
                             decoration:
                                 InputDecoration(hintText: 'Activation code'),
                             onChanged: (value) => context
-                                .read<CreateGroupCubit>()
+                                .read<JoinGroupCubit>()
                                 .activationCodeChanged(value),
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.text,
@@ -107,35 +95,35 @@ class CreateGroupScreen extends StatelessWidget {
                               onPrimary: Colors.white,
                             ),
                             onPressed: () => _submitForm(context,
-                                state.status == CreateGroupStatus.submitting),
-                            child: Text('Create group'),
+                                state.status == JoinGroupStatus.submitting),
+                            child: Text('Join group'),
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
-  _submitForm(BuildContext context, bool isSubmnitting) async {
+  _submitForm(BuildContext context, bool isSubmitting) async {
     final User user = context.read<UserBloc>().state.user;
 
-    if (_formKey.currentState.validate() && !isSubmnitting) {
+    if (_formKey.currentState.validate() && !isSubmitting) {
       final group =
-          await context.read<CreateGroupCubit>().createGroup(ownerId: user.id);
+          await context.read<JoinGroupCubit>().joinGroup(userId: user.id);
       if (group == null) {
         return;
       }
       context.read<UserBloc>().add(UserUpdateActiveGroup(group: group));
       context.read<BottomNavBarCubit>().updateNavBarVisibility(isVisible: true);
-      // Navigator.of(context).pop();
-      // Navigator.of(context).pop();
+      //Navigator.of(context).pop();
+      //Navigator.of(context).pop();
     }
   }
 }

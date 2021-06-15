@@ -32,7 +32,7 @@ class Group extends Equatable {
     return Group(
       id: doc.id,
       name: data['name'] ?? '',
-      ownerId: data['ownerId'] ?? '',
+      ownerId: data['owner'] ?? '',
       activationCode: data['activationCode'] ?? '',
     );
   }

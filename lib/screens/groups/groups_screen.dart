@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/models/models.dart';
+import 'package:koino/repositories/group/group_repository.dart';
+import 'package:koino/screens/groups/cubit/join_group_cubit.dart';
+import 'package:koino/screens/groups/widgets/join_groop_sheet.dart';
 import 'package:koino/screens/nav/cubit/bottom_nav_bar_cubit.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
 import 'package:koino/screens/screens.dart';
@@ -36,6 +39,10 @@ class GroupsScreen extends StatelessWidget {
   }
 
   Widget _buildGroupList(List<Group> groups, BuildContext context) {
+    if (groups == null || groups.isEmpty) {
+      return Center(child: Text('No groups added yet.'));
+    }
+
     return ListView.separated(
       itemBuilder: (ctx, i) {
         return ListTile(
@@ -58,9 +65,29 @@ class GroupsScreen extends StatelessWidget {
     );
   }
 
-  void _showActivationSheet() {
-    // TODO: Implement activate group
-    print('Show activation sheet');
+  void _showActivationSheet(BuildContext context) {
+    var _formKey = GlobalKey<FormState>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      builder: (builder) {
+        return BlocProvider<JoinGroupCubit>(
+          create: (_) => JoinGroupCubit(
+            groupRepository: context.read<GroupRepository>(),
+          ),
+          child: JoinGroupSheet(
+            formKey: _formKey,
+          ),
+        );
+      },
+    );
   }
 
   void _navigateCreateGroupPage(BuildContext context) {

@@ -28,11 +28,36 @@ class GroupRepository extends BaseGroupRepository {
     final groupRef = await _firebaseFirestore.collection(Paths.GROUPS).add({
       'name': name,
       'activationCode': activationCode,
-      'owner': userRef,
+      'owner': ownerId,
       'members': [userRef],
       'memberAmount': 1,
     });
     final doc = await groupRef.get();
     return doc.exists ? Group.fromDocument(doc) : Group.empty;
+  }
+
+  @override
+  Future<Group> findByNameAndActivationCode(
+      {String name, String activationCode}) async {
+    final groupRef = _firebaseFirestore
+        .collection(Paths.GROUPS)
+        .where('name', isEqualTo: name)
+        .where('activationCode', isEqualTo: activationCode);
+
+    final querySnap = await groupRef.get();
+    return querySnap.docs.isNotEmpty
+        ? Group.fromDocument(querySnap.docs.first)
+        : null;
+  }
+
+  @override
+  Future<void> addMember({String groupId, String userId}) async {
+    final userRef = _firebaseFirestore.collection(Paths.USERS).doc(userId);
+    return await _firebaseFirestore
+        .collection(Paths.GROUPS)
+        .doc(groupId)
+        .update({
+      'members': FieldValue.arrayUnion([userRef]),
+    });
   }
 }
