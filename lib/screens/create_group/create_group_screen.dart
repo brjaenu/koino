@@ -123,10 +123,10 @@ class CreateGroupScreen extends StatelessWidget {
     );
   }
 
-  _submitForm(BuildContext context, bool isSubmnitting) async {
+  _submitForm(BuildContext context, bool isSubmitting) async {
     final User user = context.read<UserBloc>().state.user;
 
-    if (_formKey.currentState.validate() && !isSubmnitting) {
+    if (_formKey.currentState.validate() && !isSubmitting) {
       final group =
           await context.read<CreateGroupCubit>().createGroup(ownerId: user.id);
       if (group == null) {

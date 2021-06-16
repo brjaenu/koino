@@ -38,6 +38,12 @@ class CreateGroupCubit extends Cubit<CreateGroupState> {
         activationCode: state.activationCode,
         ownerId: ownerId,
       );
+      if (group == null) {
+        emit(state.copyWith(
+          status: CreateGroupStatus.error,
+          failure: new Failure(message: 'Group already exists.'),
+        ));
+      }
       emit(state.copyWith(status: CreateGroupStatus.success));
       return group;
     } catch (err) {

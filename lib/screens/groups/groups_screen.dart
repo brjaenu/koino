@@ -4,7 +4,7 @@ import 'package:koino/blocs/blocs.dart';
 import 'package:koino/models/models.dart';
 import 'package:koino/repositories/group/group_repository.dart';
 import 'package:koino/screens/groups/cubit/join_group_cubit.dart';
-import 'package:koino/screens/groups/widgets/join_groop_sheet.dart';
+import 'package:koino/screens/groups/widgets/join_group_sheet.dart';
 import 'package:koino/screens/nav/cubit/bottom_nav_bar_cubit.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
 import 'package:koino/screens/screens.dart';
@@ -30,7 +30,7 @@ class GroupsScreen extends StatelessWidget {
       onWillPop: () async => _popGroupsRoute(context),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('GRUPPEN AUSWAHL'),
+          title: Center(child: Text('GRUPPEN AUSWAHL')),
         ),
         body: _buildGroupList(groups, context),
         floatingActionButton: CustomFABGroup(icons: icons),

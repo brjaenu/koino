@@ -44,6 +44,19 @@ class JoinGroupSheet extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          ListTile(
+                            title: Center(child: Text('GRUPPE BEITRETEN')),
+                            leading: Text(''),
+                            contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            trailing: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Icon(Icons.close)),
+                            ),
+                          ),
                           const SizedBox(height: 12.0),
                           TextFormField(
                             autovalidateMode:

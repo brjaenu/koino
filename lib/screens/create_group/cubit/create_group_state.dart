@@ -17,7 +17,7 @@ class CreateGroupState extends Equatable {
 
   bool get isFormValid =>
       name.isNotEmpty &&
-      name.length >= 3 &&
+      name.length >= 4 &&
       activationCode.isNotEmpty &&
       activationCode.length >= 8;
 

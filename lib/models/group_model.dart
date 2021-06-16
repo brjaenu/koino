@@ -50,7 +50,7 @@ class Group extends Equatable {
       id: id ?? this.id,
       name: name ?? this.name,
       ownerId: ownerId ?? this.ownerId,
-      activationCode: activationCode ?? activationCode,
+      activationCode: activationCode ?? this.activationCode,
     );
   }
 }
