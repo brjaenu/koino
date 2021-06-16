@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/enums/enums.dart';
+import 'package:koino/repositories/group/group_repository.dart';
 import 'package:koino/repositories/repositories.dart';
 import 'package:koino/screens/nav/cubit/bottom_nav_bar_cubit.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
@@ -22,6 +23,7 @@ class NavScreen extends StatelessWidget {
           BlocProvider<UserBloc>(
             create: (context) => UserBloc(
               userRepository: context.read<UserRepository>(),
+              groupRepository: context.read<GroupRepository>(),
             )..add(LoadUser(userId: context.read<AuthBloc>().state.user.uid)),
           ),
         ],
@@ -52,12 +54,19 @@ class NavScreen extends StatelessWidget {
         listener: (context, state) {
           if (state.status == UserStatus.failure) {
             showDialog(
-              context: context,
-              builder: (context) => ErrorDialog(content: state.failure.message),
-            );
+                context: context,
+                builder: (context) =>
+                    ErrorDialog(content: state.failure.message));
           }
         },
         builder: (context, state) {
+          if (state.status == UserStatus.loading) {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
           return BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
             builder: (context, state) {
               return Scaffold(
@@ -71,15 +80,7 @@ class NavScreen extends StatelessWidget {
                       .values
                       .toList(),
                 ),
-                bottomNavigationBar: BottomNavBar(
-                  items: items,
-                  selectedItem: state.selectedItem,
-                  onTap: (i) {
-                    final selectedItem = BottomNavItem.values[i];
-                    _selectBottomNavItem(context, selectedItem,
-                        selectedItem == state.selectedItem);
-                  },
-                ),
+                bottomNavigationBar: _buildBottomNavBar(context, state),
               );
             },
           );
@@ -96,6 +97,22 @@ class NavScreen extends StatelessWidget {
           .popUntil((route) => route.isFirst);
     }
     context.read<BottomNavBarCubit>().updateSelectedItem(selectedItem);
+  }
+
+  Widget _buildBottomNavBar(BuildContext context, BottomNavBarState state) {
+    if (!state.isVisible) {
+      return null;
+    }
+
+    return BottomNavBar(
+      items: items,
+      selectedItem: state.selectedItem,
+      onTap: (i) {
+        final selectedItem = BottomNavItem.values[i];
+        _selectBottomNavItem(
+            context, selectedItem, selectedItem == state.selectedItem);
+      },
+    );
   }
 
   Widget _buildOffstageNavigator(BottomNavItem currentItem, bool isSelected) {

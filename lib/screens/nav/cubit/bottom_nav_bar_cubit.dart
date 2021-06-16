@@ -7,11 +7,24 @@ part 'bottom_nav_bar_state.dart';
 
 class BottomNavBarCubit extends Cubit<BottomNavBarState> {
   BottomNavBarCubit()
-      : super(BottomNavBarState(selectedItem: BottomNavItem.agenda));
+      : super(BottomNavBarState(
+          selectedItem: BottomNavItem.agenda,
+          isVisible: true,
+        ));
 
   void updateSelectedItem(BottomNavItem item) {
     if (item != state.selectedItem) {
-      emit(BottomNavBarState(selectedItem: item));
+      emit(BottomNavBarState(
+        selectedItem: item,
+        isVisible: true,
+      ));
     }
+  }
+
+  void updateNavBarVisibility({@required bool isVisible}) {
+    emit(BottomNavBarState(
+      selectedItem: state.selectedItem,
+      isVisible: isVisible,
+    ));
   }
 }
