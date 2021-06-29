@@ -4,6 +4,7 @@ import 'package:koino/blocs/blocs.dart';
 import 'package:koino/config/custom_router.dart';
 import 'package:koino/enums/bottom_nav_item.dart';
 import 'package:koino/repositories/repositories.dart';
+import 'package:koino/screens/agenda/cubit/register_event_cubit.dart';
 import 'package:koino/screens/screens.dart';
 
 class TabNavigator extends StatelessWidget {
@@ -44,11 +45,20 @@ class TabNavigator extends StatelessWidget {
   Widget _getScreen(BuildContext context, BottomNavItem item) {
     switch (item) {
       case BottomNavItem.agenda:
-        return BlocProvider(
-          create: (context) => EventBloc(
-            eventRepository: context.read<EventRepository>(),
-            userBloc: context.read<UserBloc>(),
-          )..add(EventFetchEvents()),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => EventBloc(
+                eventRepository: context.read<EventRepository>(),
+                userBloc: context.read<UserBloc>(),
+              )..add(EventFetchEvents()),
+            ),
+            BlocProvider(
+              create: (context) => RegisterEventCubit(
+                eventRepository: context.read<EventRepository>(),
+              ),
+            ),
+          ],
           child: AgendaScreen(),
         );
       case BottomNavItem.prayerwall:

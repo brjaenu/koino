@@ -14,15 +14,32 @@ class EventRepository extends BaseEventRepository {
   @override
   Future<List<Event>> findByGroupId({@required String groupId}) async {
     final eventsSnap = await _firebaseFirestore
-        .collection(Paths.GROUPS)
-        .doc(groupId)
         .collection(Paths.EVENTS)
+        .where('groupId', isEqualTo: groupId)
         .orderBy('date', descending: false)
         .startAt([DateTime.now()]).get();
     return eventsSnap.docs.isNotEmpty
-        ? eventsSnap.docs
-            .map((doc) => Event.fromDocument(doc))
-            .toList()
+        ? eventsSnap.docs.map((doc) => Event.fromDocument(doc)).toList()
         : List.empty();
+  }
+
+  @override
+  Future<void> registerToEvent({String eventId, String userId}) async {
+    final registrationRef = await _firebaseFirestore
+        .collection(Paths.EVENTS)
+        .doc(eventId)
+        .collection(Paths.REGISTRATIONS);
+    return registrationRef.doc(userId).set({
+      'additionalAmount': 0,
+    });
+  }
+
+  @override
+  Future<void> unregisterFromEvent({String eventId, String userId}) async {
+    final registrationRef = await _firebaseFirestore
+        .collection(Paths.EVENTS)
+        .doc(eventId)
+        .collection(Paths.REGISTRATIONS);
+    return registrationRef.doc(userId).delete();
   }
 }
