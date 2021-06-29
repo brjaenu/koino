@@ -1,13 +1,12 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:koino/blocs/blocs.dart';
 import 'package:koino/blocs/user/user_bloc.dart';
 import 'package:koino/models/event_model.dart';
 import 'package:koino/models/models.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
 import 'package:koino/widgets/widgets.dart';
-
-import 'bloc/event_bloc.dart';
 
 class AgendaScreen extends StatefulWidget {
   static const String routeName = '/agenda';
@@ -222,7 +221,7 @@ class UpcommingEventCard extends StatelessWidget {
     }
     List<Registration> registrations = snapshot.data;
     final userId = ctx.read<UserBloc>().state.user.id;
-    if (registrations.where((r) => r.id == userId).length > 0) {
+    if (registrations.where((r) => r.id == userId).toList().length > 0) {
       return ElevatedButton(
         onPressed: () {},
         child: Text(
@@ -344,7 +343,7 @@ class EventCard extends StatelessWidget {
     }
     List<Registration> registrations = snapshot.data;
     final userId = ctx.read<UserBloc>().state.user.id;
-    if (registrations.where((r) => r.id == userId).length > 0) {
+    if (registrations.where((r) => r.id == userId).toList().length > 0) {
       return ElevatedButton(
         onPressed: () {},
         child: Text(
