@@ -60,29 +60,29 @@ class NavScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          if (state.status == UserStatus.loading) {
-            return Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
+          if (state.status == UserStatus.loaded) {
+            return BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
+              builder: (context, state) {
+                return Scaffold(
+                  body: Stack(
+                    children: items
+                        .map((item, _) => MapEntry(
+                              item,
+                              _buildOffstageNavigator(
+                                  item, item == state.selectedItem),
+                            ))
+                        .values
+                        .toList(),
+                  ),
+                  bottomNavigationBar: _buildBottomNavBar(context, state),
+                );
+              },
             );
           }
-          return BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
-            builder: (context, state) {
-              return Scaffold(
-                body: Stack(
-                  children: items
-                      .map((item, _) => MapEntry(
-                            item,
-                            _buildOffstageNavigator(
-                                item, item == state.selectedItem),
-                          ))
-                      .values
-                      .toList(),
-                ),
-                bottomNavigationBar: _buildBottomNavBar(context, state),
-              );
-            },
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         },
       ),
