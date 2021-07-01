@@ -71,33 +71,19 @@ class UpcomingEventCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircleAvatar(
-                              maxRadius: 20.0,
-                              backgroundColor: Color.fromRGBO(0, 0, 0, 0.1),
-                              child: FaIcon(
-                                FontAwesomeIcons.calendarCheck,
+                        Flexible(
+                          child: Container(
+                            child: Text(
+                              event.title,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
                                 color: Colors.white,
+                                fontSize: 20.0,
                               ),
                             ),
-                            SizedBox(width: 8.0),
-                            Flexible(
-                              child: Container(
-                                child: Text(
-                                  event.title,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                         dateWidget,
                       ],
@@ -153,12 +139,19 @@ class UpcomingEventCard extends StatelessWidget {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              calculateRegistrationAmount(snapshot) +
-                                  " Angemeldet",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                buildBookmarkIfRegistered(
+                                    context, snapshot, state),
+                                Text(
+                                  calculateRegistrationAmount(snapshot) +
+                                      " Angemeldet",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                             _buildRegistrationButton(context, snapshot, state),
                           ],
@@ -242,5 +235,34 @@ class UpcomingEventCard extends StatelessWidget {
           .read<RegisterEventCubit>()
           .unregisterFromEvent(eventId: eventId, userId: userId);
     }
+  }
+
+  Widget buildBookmarkIfRegistered(
+      BuildContext context, AsyncSnapshot snapshot, RegisterEventState state) {
+    var userId = context.read<UserBloc>().state.user.id;
+    if (!snapshot.hasData ||
+        !(snapshot.data.where((r) => r.id == userId).toList().length > 0)) {
+      return Container();
+    }
+    return Padding(
+      padding: EdgeInsets.only(right: 8.0),
+      child: Stack(
+        alignment: AlignmentDirectional.topCenter,
+        children: [
+          FaIcon(
+            FontAwesomeIcons.solidBookmark,
+            color: Colors.amber,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: FaIcon(
+              FontAwesomeIcons.solidStar,
+              color: Colors.white,
+              size: 12.0,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
