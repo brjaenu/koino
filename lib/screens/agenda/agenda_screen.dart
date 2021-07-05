@@ -5,6 +5,7 @@ import 'package:koino/blocs/blocs.dart';
 import 'package:koino/blocs/user/user_bloc.dart';
 import 'package:koino/models/event_model.dart';
 import 'package:koino/models/models.dart';
+import 'package:koino/screens/event_detail/event_detail_screen.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
 import 'package:koino/widgets/widgets.dart';
 
@@ -60,7 +61,10 @@ class _AgendaScreenState extends State<AgendaScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     final event = state.events[index];
                     if (index == 0) {
-                      return UpcomingEventCard(event: event);
+                      return GestureDetector(
+                        onTap: () => openDetailPage(event),
+                        child: UpcomingEventCard(event: event),
+                      );
                     }
                     return EventCard(event: event);
                   })
@@ -73,18 +77,14 @@ class _AgendaScreenState extends State<AgendaScreen> {
         );
     }
   }
-}
-/*
-ElevatedButton(
-  onPressed: () => Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (_) => Scaffold(
-        appBar: AppBar(
-          title: Text('Termin Details'),
+
+  void openDetailPage(Event event) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => EventDetailScreen(
+          event: event,
         ),
       ),
-    ),
-  ),
-  child: Text('Agenda'),
-),
- */
+    );
+  }
+}
