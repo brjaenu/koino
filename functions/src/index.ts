@@ -9,12 +9,24 @@ const db = admin.firestore();
 exports.addEventRegistration = functions.firestore.document('/events/{eventId}/registrations/{registrationId}').onCreate(async (newRegistration, context) => {
     const eventId = context.params.eventId;
     const docRef = db.doc('/events/' + eventId);
+    const userId = context.params.registrationId;
 
     return docRef.get().then(snap => {
         // Prepare new amount value
+        let registeredUsers: string[];
+        if (snap.get('registeredUsers') == null) {
+            registeredUsers = [];
+        } else {
+            registeredUsers = snap.get('registeredUsers');
+        }
+        if (userId == null || registeredUsers.includes(userId)) {
+            return;
+        }
         const registrationCount = snap.get('registrationAmount') + 1;
-        const data = { 'registrationAmount': registrationCount }
-
+        const data = {
+            'registrationAmount': registrationCount,
+            'registeredUsers': admin.firestore.FieldValue.arrayUnion(userId),
+        };
         // run update on event
         return docRef.update(data)
     })
@@ -23,6 +35,7 @@ exports.addEventRegistration = functions.firestore.document('/events/{eventId}/r
 exports.removeEventRegistration = functions.firestore.document('/events/{eventId}/registrations/{registrationId}').onDelete(async (oldRegistrationDoc, context) => {
     const eventId = context.params.eventId;
     const docRef = db.doc('/events/' + eventId);
+    const userId = context.params.registrationId;
 
     // Hacky way
     const oldRegistration = JSON.stringify(oldRegistrationDoc.data());
@@ -35,8 +48,21 @@ exports.removeEventRegistration = functions.firestore.document('/events/{eventId
 
     return docRef.get().then(snap => {
         // Prepare new amount value
+
+        if (snap.get('registeredUsers') == null) {
+            return;
+        }
+
+        const registeredUsers: string[] = snap.get('registeredUsers');
+        if (userId == null || !registeredUsers.includes(userId)) {
+            return;
+        }
+
         const registrationAmount = snap.get('registrationAmount') - amountOfOldRegistrations;
-        const data = { 'registrationAmount': registrationAmount }
+        const data = {
+            'registrationAmount': registrationAmount,
+            'registeredUsers': admin.firestore.FieldValue.arrayRemove(userId),
+        };
 
         // run update on event
         return docRef.update(data);
