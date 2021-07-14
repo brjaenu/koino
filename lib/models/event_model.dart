@@ -12,6 +12,7 @@ class Event extends Equatable {
   final String groupId;
   final String authorId;
   final Stream<List<Registration>> registrations;
+  final List<String> registeredUsers;
   final int registrationAmount;
   final String speaker;
   final Timestamp date;
@@ -22,6 +23,7 @@ class Event extends Equatable {
     @required this.description,
     @required this.speaker,
     @required this.registrations,
+    @required this.registeredUsers,
     @required this.registrationAmount,
     @required this.date,
     @required this.groupId,
@@ -34,6 +36,7 @@ class Event extends Equatable {
     description: '',
     speaker: '',
     registrations: Stream.value(List.empty()),
+    registeredUsers: List.empty(),
     registrationAmount: 0,
     date: Timestamp.now(),
     authorId: '',
@@ -46,6 +49,7 @@ class Event extends Equatable {
       'description': this.description,
       'speaker': this.speaker,
       'registrationAmount': this.registrationAmount,
+      'registeredUsers': this.registeredUsers,
       'date': this.date,
       'authorId': this.authorId,
       'groupId': groupId,
@@ -62,7 +66,8 @@ class Event extends Equatable {
         .map((snap) => snap.docs
             .map((regiDoc) => Registration.fromDocument(regiDoc))
             .toList());
-            
+    final registeredUsers = data['registeredUsers'] != null ?
+        List.from(data['registeredUsers']).map((e) => e.toString()).toList() : List<String>.empty();
     return Event(
       id: doc.id,
       title: data['title'] ?? '',
@@ -70,6 +75,7 @@ class Event extends Equatable {
       speaker: data['speaker'] ?? '',
       //registrations: Stream.value(List.empty()),
       registrations: regiSnap,
+      registeredUsers: registeredUsers,
       registrationAmount: data['registrationAmount'] ?? 0,
       date: data['date'] ?? Timestamp.now(),
       authorId: data['authorId'] ?? '',
@@ -84,6 +90,7 @@ class Event extends Equatable {
         description,
         speaker,
         registrationAmount,
+        registeredUsers,
         date,
         authorId,
         groupId
@@ -96,6 +103,7 @@ class Event extends Equatable {
     String groupId,
     String authorId,
     Stream<List<Future<Registration>>> registrations,
+    List<String> registeredUsers,
     int registrationAmount,
     String speaker,
     Timestamp date,
@@ -107,6 +115,7 @@ class Event extends Equatable {
       groupId: groupId ?? this.groupId,
       authorId: authorId ?? this.authorId,
       registrations: registrations ?? this.registrations,
+      registeredUsers: registeredUsers ?? this.registeredUsers,
       registrationAmount: registrationAmount ?? this.registrationAmount,
       speaker: speaker ?? this.speaker,
       date: date ?? this.date,
