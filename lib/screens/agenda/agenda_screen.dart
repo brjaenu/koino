@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/blocs/user/user_bloc.dart';
 import 'package:koino/models/event_model.dart';
@@ -53,7 +52,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
         return RefreshIndicator(
           onRefresh: () async {
             context.read<EventBloc>()..add(EventFetchEvents());
-            return true;
+            setState(() {});
           },
           child: state.events.length > 0
               ? ListView.builder(

@@ -14,6 +14,8 @@ class EventBloc extends Bloc<EventEvent, EventState> {
   final EventRepository _eventRepository;
   final UserBloc _userBloc;
 
+  StreamSubscription<List<Event>> _eventsSubscription;
+
   EventBloc({
     @required EventRepository eventRepository,
     @required UserBloc userBloc,
@@ -22,14 +24,38 @@ class EventBloc extends Bloc<EventEvent, EventState> {
         super(EventState.initial());
 
   @override
+  Future<void> close() {
+    _eventsSubscription?.cancel();
+    return super.close();
+  }
+
+  @override
   Stream<EventState> mapEventToState(
     EventEvent event,
   ) async* {
-    if (event is EventFetchEvents) {
+    if (event is EventCreateEventStream) {
+      yield* _mapEventCreateEventStreamToState();
+    } else if (event is EventProcessEventStream) {
+      yield* _mapEventProcessEventStreamToState(event);
+    } else if (event is EventFetchEvents) {
       yield* _mapEventFetchEventsToState();
-    } else if (event is EventPaginateEvents) {
-      yield* _mapEventPaginateEventsToState();
     }
+  }
+
+  Stream<EventState> _mapEventCreateEventStreamToState() async* {
+    _eventsSubscription?.cancel();
+    _eventsSubscription = _eventRepository
+        .findByGroupIdStream(groupId: _userBloc.state.user.activeGroup.id)
+        .listen((events) async {
+      add(EventProcessEventStream(events: events));
+    });
+  }
+
+  Stream<EventState> _mapEventProcessEventStreamToState(
+      EventProcessEventStream event) async* {
+    yield state.copyWith(
+      events: event.events,
+    );
   }
 
   Stream<EventState> _mapEventFetchEventsToState() async* {
@@ -46,18 +72,6 @@ class EventBloc extends Bloc<EventEvent, EventState> {
       );
     } catch (err) {
       print(err);
-      yield state.copyWith(
-        status: EventStatus.error,
-        failure: const Failure(message: 'Unable to load events'),
-      );
-    }
-  }
-
-  Stream<EventState> _mapEventPaginateEventsToState() async* {
-    yield state.copyWith(status: EventStatus.paginating);
-    try {
-      // TODO: Implement pagination
-    } catch (err) {
       yield state.copyWith(
         status: EventStatus.error,
         failure: const Failure(message: 'Unable to load events'),

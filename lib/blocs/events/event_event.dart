@@ -7,6 +7,17 @@ class EventEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class EventFetchEvents extends EventEvent {}
+class EventCreateEventStream extends EventEvent {}
 
-class EventPaginateEvents extends EventEvent {}
+class EventProcessEventStream extends EventEvent {
+  final List<Event> events;
+
+  EventProcessEventStream({
+    @required this.events,
+  });
+
+  @override
+  List<Object> get props => [events];
+}
+
+class EventFetchEvents extends EventEvent {}

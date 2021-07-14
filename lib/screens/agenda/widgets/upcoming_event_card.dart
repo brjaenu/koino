@@ -17,6 +17,9 @@ class UpcomingEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userId = context.read<UserBloc>().state.user.id;
+    bool isRegistered =
+        event.registeredUsers.where((r) => r == userId).toList().length > 0;
     var dateWidget = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -133,30 +136,25 @@ class UpcomingEventCard extends StatelessWidget {
                   }
                 },
                 builder: (context, state) {
-                  return StreamBuilder(
-                      stream: event.registrations,
-                      builder: (context, snapshot) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                buildBookmarkIfRegistered(
-                                    context, snapshot, state),
-                                Text(
-                                  calculateRegistrationAmount(snapshot) +
-                                      " Angemeldet",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          buildBookmarkIfRegistered(
+                              context, isRegistered, state),
+                          Text(
+                            event.registrationAmount.toString() + " Angemeldet",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                             ),
-                            _buildRegistrationButton(context, snapshot, state),
-                          ],
-                        );
-                      });
+                          ),
+                        ],
+                      ),
+                      _buildRegistrationButton(context, isRegistered, state),
+                    ],
+                  );
                 },
               ),
             ),
@@ -166,25 +164,9 @@ class UpcomingEventCard extends StatelessWidget {
     );
   }
 
-  String calculateRegistrationAmount(AsyncSnapshot snapshot) {
-    if (!snapshot.hasData) {
-      return "0";
-    }
-    List<Registration> registrations = snapshot.data;
-    var registrationAmount =
-        registrations.map((r) => r.additionalAmount).reduce((a, b) => a + b) +
-            registrations.length;
-    return registrationAmount.toString();
-  }
-
   Widget _buildRegistrationButton(
-      BuildContext ctx, AsyncSnapshot snapshot, RegisterEventState state) {
-    if (!snapshot.hasData) {
-      return Container();
-    }
-    List<Registration> registrations = snapshot.data;
-    final userId = ctx.read<UserBloc>().state.user.id;
-    if (registrations.where((r) => r.id == userId).toList().length > 0) {
+      BuildContext ctx, bool isRegistered, RegisterEventState state) {
+    if (isRegistered) {
       return ElevatedButton(
         onPressed: () => _unregister(
             ctx, event.id, state.status == RegisterEventStatus.submitting),
@@ -238,10 +220,8 @@ class UpcomingEventCard extends StatelessWidget {
   }
 
   Widget buildBookmarkIfRegistered(
-      BuildContext context, AsyncSnapshot snapshot, RegisterEventState state) {
-    var userId = context.read<UserBloc>().state.user.id;
-    if (!snapshot.hasData ||
-        !(snapshot.data.where((r) => r.id == userId).toList().length > 0)) {
+      BuildContext context, bool isRegistered, RegisterEventState state) {
+    if (!isRegistered) {
       return Container();
     }
     return Padding(

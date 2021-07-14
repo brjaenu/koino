@@ -51,7 +51,7 @@ class TabNavigator extends StatelessWidget {
               create: (context) => EventBloc(
                 eventRepository: context.read<EventRepository>(),
                 userBloc: context.read<UserBloc>(),
-              )..add(EventFetchEvents()),
+              )..add(EventCreateEventStream()),
             ),
             BlocProvider(
               create: (context) => RegisterEventCubit(

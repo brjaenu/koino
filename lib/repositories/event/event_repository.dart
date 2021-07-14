@@ -24,6 +24,17 @@ class EventRepository extends BaseEventRepository {
   }
 
   @override
+  Stream<List<Event>> findByGroupIdStream({String groupId}) {
+    return _firebaseFirestore
+        .collection(Paths.EVENTS)
+        .where('groupId', isEqualTo: groupId)
+        .orderBy('date', descending: false)
+        .startAt([DateTime.now()])
+        .snapshots()
+        .map((s) => s.docs.map((d) => Event.fromDocument(d)).toList());
+  }
+
+  @override
   Future<void> registerToEvent({String eventId, String userId}) async {
     final registrationRef = await _firebaseFirestore
         .collection(Paths.EVENTS)
