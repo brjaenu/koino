@@ -4,6 +4,8 @@ import 'package:koino/blocs/blocs.dart';
 import 'package:koino/blocs/user/user_bloc.dart';
 import 'package:koino/models/event_model.dart';
 import 'package:koino/models/models.dart';
+import 'package:koino/repositories/repositories.dart';
+import 'package:koino/screens/agenda/cubit/register_event_cubit.dart';
 import 'package:koino/screens/event_detail/event_detail_screen.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
 import 'package:koino/widgets/widgets.dart';
@@ -59,13 +61,22 @@ class _AgendaScreenState extends State<AgendaScreen> {
                   itemCount: state.events.length,
                   itemBuilder: (BuildContext context, int index) {
                     final event = state.events[index];
+                    var card;
                     if (index == 0) {
-                      return GestureDetector(
+                      card = GestureDetector(
                         onTap: () => openDetailPage(event),
                         child: UpcomingEventCard(event: event),
                       );
+                    } else {
+                      card = EventCard(event: event);
                     }
-                    return EventCard(event: event);
+
+                    return BlocProvider<RegisterEventCubit>(
+                      create: (context) => RegisterEventCubit(
+                        eventRepository: context.read<EventRepository>(),
+                      ),
+                      child: card,
+                    );
                   })
               : Stack(
                   children: <Widget>[

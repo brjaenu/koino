@@ -17,11 +17,15 @@ class RegisterEventCubit extends Cubit<RegisterEventState> {
   void registerForEvent({String eventId, String userId}) async {
     if (state.status == RegisterEventStatus.submitting) return null;
     try {
-      emit(state.copyWith(status: RegisterEventStatus.submitting));
+      emit(state.copyWith(
+        isRegistering: true,
+        status: RegisterEventStatus.submitting,
+      ));
       await _eventRepository.registerToEvent(eventId: eventId, userId: userId);
       emit(state.copyWith(status: RegisterEventStatus.success));
     } catch (err) {
       emit(state.copyWith(
+        isRegistering: false,
         status: RegisterEventStatus.error,
         failure: err,
       ));
@@ -31,15 +35,26 @@ class RegisterEventCubit extends Cubit<RegisterEventState> {
   void unregisterFromEvent({String eventId, String userId}) async {
     if (state.status == RegisterEventStatus.submitting) return null;
     try {
-      emit(state.copyWith(status: RegisterEventStatus.submitting));
+      emit(state.copyWith(
+        isUnregistering: true,
+        status: RegisterEventStatus.submitting,
+      ));
       await _eventRepository.unregisterFromEvent(
           eventId: eventId, userId: userId);
       emit(state.copyWith(status: RegisterEventStatus.success));
     } catch (err) {
       emit(state.copyWith(
+        isUnregistering: false,
         status: RegisterEventStatus.error,
         failure: err,
       ));
     }
+  }
+
+  void transmittingComplete() async {
+    emit(state.copyWith(
+      isRegistering: false,
+      isUnregistering: false,
+    ));
   }
 }

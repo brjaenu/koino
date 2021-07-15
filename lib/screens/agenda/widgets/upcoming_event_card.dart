@@ -17,6 +17,8 @@ class UpcomingEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<RegisterEventCubit>().transmittingComplete();
+
     final userId = context.read<UserBloc>().state.user.id;
     bool isRegistered =
         event.registeredUsers.where((r) => r == userId).toList().length > 0;
@@ -166,7 +168,10 @@ class UpcomingEventCard extends StatelessWidget {
 
   Widget _buildRegistrationButton(
       BuildContext ctx, bool isRegistered, RegisterEventState state) {
-    if (isRegistered) {
+    final isRegistering = ctx.read<RegisterEventCubit>().state.isRegistering;
+    final isUnregistering =
+        ctx.read<RegisterEventCubit>().state.isUnregistering;
+    if ((isRegistered && !isUnregistering) || isRegistering) {
       return ElevatedButton(
         onPressed: () => _unregister(
             ctx, event.id, state.status == RegisterEventStatus.submitting),
@@ -221,7 +226,10 @@ class UpcomingEventCard extends StatelessWidget {
 
   Widget buildBookmarkIfRegistered(
       BuildContext context, bool isRegistered, RegisterEventState state) {
-    if (!isRegistered) {
+    final isRegistering =
+        context.read<RegisterEventCubit>().state.isRegistering;
+
+    if (!isRegistered && !isRegistering) {
       return Container();
     }
     return Padding(

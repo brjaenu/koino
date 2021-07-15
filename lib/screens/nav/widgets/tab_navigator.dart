@@ -45,20 +45,11 @@ class TabNavigator extends StatelessWidget {
   Widget _getScreen(BuildContext context, BottomNavItem item) {
     switch (item) {
       case BottomNavItem.agenda:
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => EventBloc(
-                eventRepository: context.read<EventRepository>(),
-                userBloc: context.read<UserBloc>(),
-              )..add(EventCreateEventStream()),
-            ),
-            BlocProvider(
-              create: (context) => RegisterEventCubit(
-                eventRepository: context.read<EventRepository>(),
-              ),
-            ),
-          ],
+        return BlocProvider(
+          create: (context) => EventBloc(
+            eventRepository: context.read<EventRepository>(),
+            userBloc: context.read<UserBloc>(),
+          )..add(EventCreateEventStream()),
           child: AgendaScreen(),
         );
       case BottomNavItem.prayerwall:
