@@ -6,6 +6,7 @@ import 'package:koino/models/event_model.dart';
 import 'package:koino/models/models.dart';
 import 'package:koino/repositories/repositories.dart';
 import 'package:koino/screens/agenda/cubit/register_event_cubit.dart';
+import 'package:koino/screens/event_detail/cubit/event_detail_cubit.dart';
 import 'package:koino/screens/event_detail/event_detail_screen.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
 import 'package:koino/widgets/widgets.dart';
@@ -63,10 +64,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
                     final event = state.events[index];
                     var card;
                     if (index == 0) {
-                      card = GestureDetector(
-                        onTap: () => openDetailPage(event),
-                        child: UpcomingEventCard(event: event),
-                      );
+                      card = UpcomingEventCard(event: event);
                     } else {
                       card = EventCard(event: event);
                     }
@@ -75,7 +73,10 @@ class _AgendaScreenState extends State<AgendaScreen> {
                       create: (context) => RegisterEventCubit(
                         eventRepository: context.read<EventRepository>(),
                       ),
-                      child: card,
+                      child: GestureDetector(
+                        onTap: () => openDetailPage(event),
+                        child: card,
+                      ),
                     );
                   })
               : Stack(
@@ -91,8 +92,13 @@ class _AgendaScreenState extends State<AgendaScreen> {
   void openDetailPage(Event event) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => EventDetailScreen(
-          event: event,
+        builder: (_) => BlocProvider(
+          create: (context) => EventDetailCubit(
+              eventRepository: context.read<EventRepository>(),
+              registrationRepository: context.read<RegistrationRepository>()),
+          child: EventDetailScreen(
+            event: event,
+          ),
         ),
       ),
     );

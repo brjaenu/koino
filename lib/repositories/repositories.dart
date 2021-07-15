@@ -6,3 +6,5 @@ export 'group/base_group_repository.dart';
 export 'group/group_repository.dart';
 export 'event/base_event_repository.dart';
 export 'event/event_repository.dart';
+export 'registration/base_registration_repository.dart';
+export 'registration/registration_repository.dart';
