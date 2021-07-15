@@ -45,7 +45,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
   Stream<EventState> _mapEventCreateEventStreamToState() async* {
     _eventsSubscription?.cancel();
     _eventsSubscription = _eventRepository
-        .findByGroupIdStream(groupId: _userBloc.state.user.activeGroup.id)
+        .streamByGroupId(groupId: _userBloc.state.user.activeGroup.id)
         .listen((events) async {
       add(EventProcessEventStream(events: events));
     });

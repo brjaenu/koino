@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/models/models.dart';
 import 'package:koino/screens/event_detail/cubit/event_detail_cubit.dart';
+import 'package:koino/screens/event_detail/widgets/custom_chip.dart';
 import 'package:koino/widgets/widgets.dart';
 
 class EventDetailScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class EventDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<EventDetailCubit>().loadDetails(event);
+    context.read<EventDetailCubit>().loadDetails(eventId: event.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(event.title),
@@ -55,7 +56,7 @@ class EventDetailScreen extends StatelessWidget {
                                   Flexible(
                                     child: Container(
                                       child: Text(
-                                        event.title,
+                                        state.event.title,
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
                                         style: TextStyle(
@@ -71,14 +72,14 @@ class EventDetailScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 16.0),
                               Text(
-                                event.description,
+                                state.event.description,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
                               ),
                               SizedBox(height: 16.0),
-                              event.speaker != ""
+                              state.event.speaker != ""
                                   ? Row(
                                       children: [
                                         Icon(
@@ -87,7 +88,7 @@ class EventDetailScreen extends StatelessWidget {
                                         ),
                                         SizedBox(width: 8.0),
                                         Text(
-                                          event.speaker,
+                                          state.event.speaker,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
@@ -111,9 +112,9 @@ class EventDetailScreen extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               buildBookmarkIfRegistered(
-                                  context, state.registrations),
+                                  context, state.event.registeredUsers),
                               Text(
-                                event.registrationAmount.toString() +
+                                state.event.registrationAmount.toString() +
                                     " Angemeldet",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -128,6 +129,42 @@ class EventDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              state.event.registeredUsers.length > 0
+                  ? Card(
+                      margin: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Angemeldet sind...',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            Wrap(
+                              children: [
+                                ...state.registrations
+                                    .map((registration) => CustomChip(
+                                          label: registration.username,
+                                          isHighlighted: registration.id ==
+                                              context
+                                                  .read<UserBloc>()
+                                                  .state
+                                                  .user
+                                                  .id,
+                                        ))
+                                    .toList()
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           );
         },
@@ -136,10 +173,9 @@ class EventDetailScreen extends StatelessWidget {
   }
 
   Widget buildBookmarkIfRegistered(
-      BuildContext context, List<Registration> registrations) {
+      BuildContext context, List<String> registrations) {
     var userId = context.read<UserBloc>().state.user.id;
-    if (!registrations.isEmpty ||
-        !(registrations.where((r) => r.id == userId).toList().length > 0)) {
+    if (registrations.isEmpty || !registrations.contains(userId)) {
       return Container();
     }
     return Padding(

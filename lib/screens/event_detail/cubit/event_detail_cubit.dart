@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,16 @@ class EventDetailCubit extends Cubit<EventDetailState> {
   final EventRepository _eventRepository;
   final RegistrationRepository _registrationRepository;
 
+  StreamSubscription<Event> _eventSubscription;
+  StreamSubscription<List<Registration>> _registrationsSubscription;
+
+  @override
+  Future<void> close() {
+    _eventSubscription?.cancel();
+    _registrationsSubscription?.cancel();
+    return super.close();
+  }
+
   EventDetailCubit({
     @required EventRepository eventRepository,
     @required RegistrationRepository registrationRepository,
@@ -18,8 +30,8 @@ class EventDetailCubit extends Cubit<EventDetailState> {
         _registrationRepository = registrationRepository,
         super(EventDetailState.initial());
 
-  void loadDetails(Event event) async {
-    if (event == null) {
+  void loadDetails({String eventId}) async {
+    if (eventId == null) {
       emit(state.copyWith(
         status: EventDetailStatus.error,
         failure: const Failure(message: 'No event available'),
@@ -30,15 +42,21 @@ class EventDetailCubit extends Cubit<EventDetailState> {
       emit(state.copyWith(
         status: EventDetailStatus.loading,
       ));
-      _registrationRepository
-          .findByEventIdStream(eventId: event.id)
+      _eventSubscription?.cancel();
+      _registrationsSubscription?.cancel();
+
+      _eventSubscription =
+          _eventRepository.streamByEventId(eventId: eventId).listen((event) {
+        emit(state.copyWith(
+          event: event,
+          status: EventDetailStatus.loaded,
+        ));
+      });
+      _registrationsSubscription = _registrationRepository
+          .findByEventIdStream(eventId: eventId)
           .listen((registrations) {
         emit(state.copyWith(
           registrations: registrations,
-          status: EventDetailStatus.loaded,
-        ));
-        emit(state.copyWith(
-          event: event,
           status: EventDetailStatus.loaded,
         ));
       });

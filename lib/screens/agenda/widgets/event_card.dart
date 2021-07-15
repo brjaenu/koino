@@ -156,9 +156,9 @@ class EventCard extends StatelessWidget {
   _register(BuildContext context, String eventId, bool isSubmitting) {
     if (!isSubmitting) {
       final userId = context.read<UserBloc>().state.user.id;
-      context
-          .read<RegisterEventCubit>()
-          .registerForEvent(eventId: eventId, userId: userId);
+      final username = context.read<UserBloc>().state.user.username;
+      context.read<RegisterEventCubit>().registerForEvent(
+          eventId: eventId, userId: userId, username: username);
     }
   }
 

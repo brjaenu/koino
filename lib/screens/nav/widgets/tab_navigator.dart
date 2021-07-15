@@ -4,7 +4,6 @@ import 'package:koino/blocs/blocs.dart';
 import 'package:koino/config/custom_router.dart';
 import 'package:koino/enums/bottom_nav_item.dart';
 import 'package:koino/repositories/repositories.dart';
-import 'package:koino/screens/agenda/cubit/register_event_cubit.dart';
 import 'package:koino/screens/screens.dart';
 
 class TabNavigator extends StatelessWidget {

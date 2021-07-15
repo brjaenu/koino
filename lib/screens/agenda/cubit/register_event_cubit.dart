@@ -14,14 +14,19 @@ class RegisterEventCubit extends Cubit<RegisterEventState> {
   })  : _eventRepository = eventRepository,
         super(RegisterEventState.initial());
 
-  void registerForEvent({String eventId, String userId}) async {
+  void registerForEvent(
+      {String eventId, String userId, String username}) async {
     if (state.status == RegisterEventStatus.submitting) return null;
     try {
       emit(state.copyWith(
         isRegistering: true,
         status: RegisterEventStatus.submitting,
       ));
-      await _eventRepository.registerToEvent(eventId: eventId, userId: userId);
+      await _eventRepository.registerToEvent(
+        eventId: eventId,
+        userId: userId,
+        username: username,
+      );
       emit(state.copyWith(status: RegisterEventStatus.success));
     } catch (err) {
       emit(state.copyWith(
