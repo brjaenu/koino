@@ -23,10 +23,11 @@ class GroupRepository extends BaseGroupRepository {
   }
 
   @override
-  Future<Group> create(
-      {@required String name,
-      @required String activationCode,
-      @required String ownerId}) async {
+  Future<Group> create({
+    @required String name,
+    @required String activationCode,
+    @required String ownerId,
+  }) async {
     if (await this.findByNameAndActivationCode(
             name: name, activationCode: activationCode) !=
         null) {

@@ -61,6 +61,12 @@ class JuGruppeApp extends StatelessWidget {
         RepositoryProvider(
           create: (_) => GroupRepository(),
         ),
+        RepositoryProvider(
+          create: (_) => EventRepository(),
+        ),
+        RepositoryProvider(
+          create: (_) => RegistrationRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
