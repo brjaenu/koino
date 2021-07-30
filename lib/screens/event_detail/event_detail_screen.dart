@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:koino/blocs/blocs.dart';
@@ -39,6 +40,7 @@ class EventDetailScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         decoration: BoxDecoration(
@@ -67,7 +69,22 @@ class EventDetailScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  //dateWidget,
+                                  Column(
+                                    children: [
+                                      Text(
+                                          DateFormat('dd.MMM')
+                                              .format(event.date.toDate()),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white)),
+                                      Text(
+                                          DateFormat('HH:mm')
+                                              .format(event.date.toDate()),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white))
+                                    ],
+                                  )
                                 ],
                               ),
                               SizedBox(height: 16.0),
@@ -122,33 +139,18 @@ class EventDetailScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          //_buildRegistrationButton(context, snapshot, state),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              state.event.registeredUsers.length > 0
-                  ? Card(
-                      margin: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Angemeldet sind...',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                              ),
-                            ),
-                            Wrap(
-                              children: [
-                                ...state.registrations
-                                    .map((registration) => CustomChip(
+                      Divider(),
+                      Column(
+                        children: [
+                          Wrap(
+                            alignment: WrapAlignment.start,
+                            children: [
+                              ...state.registrations
+                                  .map((registration) => Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: CustomChip(
                                           label: registration.username,
                                           isHighlighted: registration.id ==
                                               context
@@ -156,15 +158,17 @@ class EventDetailScreen extends StatelessWidget {
                                                   .state
                                                   .user
                                                   .id,
-                                        ))
-                                    .toList()
-                              ],
-                            ),
-                          ],
-                        ),
+                                        ),
+                                  ))
+                                  .toList()
+                            ],
+                          ),
+                        ],
                       ),
-                    )
-                  : Container(),
+                    ],
+                  ),
+                ),
+              ),
             ],
           );
         },
