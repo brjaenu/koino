@@ -6,6 +6,7 @@ import 'package:koino/models/event_model.dart';
 import 'package:koino/models/models.dart';
 import 'package:koino/repositories/repositories.dart';
 import 'package:koino/screens/agenda/cubit/register_event_cubit.dart';
+import 'package:koino/screens/create_event/create_event_screen.dart';
 import 'package:koino/screens/event_detail/cubit/event_detail_cubit.dart';
 import 'package:koino/screens/event_detail/event_detail_screen.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
@@ -42,6 +43,10 @@ class _AgendaScreenState extends State<AgendaScreen> {
             title: activeGroup.name,
           ),
           body: _buildBody(state),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () => _navigateCreateEventScreen(context),
+          ),
         );
       },
     );
@@ -102,5 +107,9 @@ class _AgendaScreenState extends State<AgendaScreen> {
         ),
       ),
     );
+  }
+
+  void _navigateCreateEventScreen(BuildContext context) {
+    Navigator.of(context).pushNamed(CreateEventScreen.routeName);
   }
 }

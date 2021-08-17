@@ -64,4 +64,28 @@ class EventRepository extends BaseEventRepository {
         .collection(Paths.REGISTRATIONS);
     return registrationRef.doc(userId).delete();
   }
+
+  @override
+  Future<Event> create({
+    String title,
+    String description,
+    String speaker,
+    Timestamp date,
+    String authorId,
+    String groupId,
+  }) async {
+    final userRef = _firebaseFirestore.collection(Paths.USERS).doc(authorId);
+    final eventRef = await _firebaseFirestore.collection(Paths.EVENTS).add({
+      'title': title,
+      'description': description,
+      'speaker': speaker,
+      'date': date,
+      'groupId': groupId,
+      'author': userRef,
+      'registeredUsers': [],
+      'registrationAmount': 0
+    });
+    final doc = await eventRef.get();
+    return doc.exists ? Event.fromDocument(doc) : null;
+  }
 }
