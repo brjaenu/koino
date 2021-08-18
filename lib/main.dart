@@ -11,6 +11,7 @@ import 'package:koino/config/custom_router.dart';
 import 'package:koino/repositories/group/group_repository.dart';
 import 'package:koino/repositories/repositories.dart';
 import 'package:koino/screens/splash_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'blocs/auth/auth_bloc.dart';
 
@@ -97,6 +98,14 @@ class JuGruppeApp extends StatelessWidget {
           initialRoute: SplashScreen.routeName,
           debugShowCheckedModeBanner: false,
           navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('de')
+          ],
         ),
       ),
     );

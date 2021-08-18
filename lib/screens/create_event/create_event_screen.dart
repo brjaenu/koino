@@ -32,7 +32,7 @@ class CreateEventScreen extends StatelessWidget {
   final _speakerFocusNode = FocusNode();
   final _dateFocusNode = FocusNode();
 
-  final format = DateFormat("dd.MM.yyyy");
+  final format = DateFormat("dd.MM.yyyy HH:mm");
 
   @override
   Widget build(BuildContext context) {

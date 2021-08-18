@@ -28,6 +28,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
   @override
   Widget build(BuildContext context) {
     final activeGroup = context.read<UserBloc>().state.user.activeGroup;
+    final isUserAdmin = activeGroup.ownerId == context.read<UserBloc>().state.user.id;
     return BlocConsumer<EventBloc, EventState>(
       listener: (context, state) {
         if (state.status == EventStatus.error) {
@@ -43,10 +44,10 @@ class _AgendaScreenState extends State<AgendaScreen> {
             title: activeGroup.name,
           ),
           body: _buildBody(state),
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton: isUserAdmin ? FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () => _navigateCreateEventScreen(context),
-          ),
+          ) : Container(),
         );
       },
     );
