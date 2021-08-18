@@ -62,7 +62,7 @@ class CreateEventCubit extends Cubit<CreateEventState> {
       if (event == null) {
         emit(state.copyWith(
           status: CreateEventStatus.error,
-          failure: new Failure(message: 'Group already exists.'),
+          failure: new Failure(message: 'Event already exists.'),
         ));
       }
       emit(state.copyWith(status: CreateEventStatus.success));
