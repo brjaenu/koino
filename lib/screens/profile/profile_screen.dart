@@ -7,13 +7,20 @@ import 'package:koino/screens/nav/widgets/widgets.dart';
 class ProfileScreen extends StatelessWidget {
   static const String routeName = '/profile';
 
+  static Route route() {
+    return MaterialPageRoute(
+      settings: const RouteSettings(name: routeName),
+      builder: (context) => ProfileScreen(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserBloc>().state.user;
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'PROFILE',
+      appBar: AppBar(
+        title: Text('PROFILE'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

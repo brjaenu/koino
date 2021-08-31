@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:koino/util/CustomTheme.dart';
 
 class CustomChip extends StatelessWidget {
   final String label;
@@ -11,7 +12,8 @@ class CustomChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var backgroundColor = isHighlighted ? Colors.amber : Colors.grey;
+    var backgroundColor =
+        isHighlighted ? Theme.of(context).accentColor : Theme.of(context).primaryColorDark;
     var textColor = isHighlighted ? Colors.white : Colors.black;
     return Chip(
       label: Text(

@@ -1,5 +1,6 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koino/blocs/blocs.dart';
@@ -52,11 +53,11 @@ class CreateEventScreen extends StatelessWidget {
             onWillPop: () async => _popGroupsRoute(context),
             child: Scaffold(
               appBar: AppBar(
-                title: Text('EVENT - ERSTELLEN'),
+                title: Text('EVENT ERSTELLEN'),
               ),
               body: Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(25.0),
                   child: ListView(
                     children: [
                       Form(
@@ -66,11 +67,18 @@ class CreateEventScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const SizedBox(height: 12.0),
+                            const SizedBox(height: 25.0),
                             TextFormField(
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              decoration: InputDecoration(hintText: 'Titel'),
+                              decoration: InputDecoration(
+                                hintText: 'TITEL',
+                                prefixIcon: Icon(
+                                  FontAwesomeIcons.tag,
+                                  color: Theme.of(context).iconTheme.color,
+                                  size: 20.0,
+                                ),
+                              ),
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.name,
                               focusNode: _titleFocusNode,
@@ -87,14 +95,20 @@ class CreateEventScreen extends StatelessWidget {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 12.0),
+                            const SizedBox(height: 25.0),
                             TextFormField(
                               maxLines: 5,
                               minLines: 2,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              decoration:
-                                  InputDecoration(hintText: 'Beschreibung'),
+                              decoration: InputDecoration(
+                                hintText: 'BESCHREIBUNG',
+                                prefixIcon: Icon(
+                                  FontAwesomeIcons.stream,
+                                  color: Theme.of(context).iconTheme.color,
+                                  size: 20.0,
+                                ),
+                              ),
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.text,
                               focusNode: _descriptionFocusNode,
@@ -111,11 +125,18 @@ class CreateEventScreen extends StatelessWidget {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 12.0),
+                            const SizedBox(height: 25.0),
                             TextFormField(
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              decoration: InputDecoration(hintText: 'Speaker'),
+                              decoration: InputDecoration(
+                                hintText: 'SPEAKER',
+                                prefixIcon: Icon(
+                                  FontAwesomeIcons.solidComment,
+                                  color: Theme.of(context).iconTheme.color,
+                                  size: 20.0,
+                                ),
+                              ),
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.name,
                               focusNode: _speakerFocusNode,
@@ -130,13 +151,19 @@ class CreateEventScreen extends StatelessWidget {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 12.0),
+                            const SizedBox(height: 25.0),
                             DateTimeField(
                                 format: format,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 decoration: InputDecoration(
-                                    hintText: 'Datum und Uhrzeit'),
+                                  hintText: 'DATUM UND UHRZEIT',
+                                  prefixIcon: Icon(
+                                    FontAwesomeIcons.clock,
+                                    color: Theme.of(context).iconTheme.color,
+                                    size: 20.0,
+                                  ),
+                                ),
                                 textInputAction: TextInputAction.next,
                                 keyboardType: TextInputType.datetime,
                                 focusNode: _dateFocusNode,
@@ -170,16 +197,11 @@ class CreateEventScreen extends StatelessWidget {
                                   }
                                   return null;
                                 }),
-                            const SizedBox(height: 28.0),
+                            const SizedBox(height: 25.0),
                             ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                elevation: 1.0,
-                                primary: Theme.of(context).primaryColor,
-                                onPrimary: Colors.white,
-                              ),
                               onPressed: () => _submitForm(context,
                                   state.status == CreateGroupStatus.submitting),
-                              child: Text('Erstellen'),
+                              child: Text('ERSTELLEN'),
                             ),
                           ],
                         ),
