@@ -143,7 +143,10 @@ class CustomTheme {
       ),
 
       iconTheme: IconThemeData(color: whiteColor, size: 20.0),
-
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: primaryColorDark,
+        selectionColor: primaryColorDark,
+      ),
       visualDensity: VisualDensity.adaptivePlatformDensity,
     );
   }
