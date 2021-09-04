@@ -41,12 +41,12 @@ void main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return JuGruppeApp();
+    return KoinoApp();
   }
 }
 
-class JuGruppeApp extends StatelessWidget {
-  const JuGruppeApp({
+class KoinoApp extends StatelessWidget {
+  const KoinoApp({
     final Key key,
   }) : super(key: key);
 
@@ -54,21 +54,12 @@ class JuGruppeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(
-          create: (_) => AuthRepository(),
-        ),
-        RepositoryProvider(
-          create: (_) => UserRepository(),
-        ),
-        RepositoryProvider(
-          create: (_) => GroupRepository(),
-        ),
-        RepositoryProvider(
-          create: (_) => EventRepository(),
-        ),
-        RepositoryProvider(
-          create: (_) => RegistrationRepository(),
-        ),
+        RepositoryProvider(create: (_) => AuthRepository()),
+        RepositoryProvider(create: (_) => UserRepository()),
+        RepositoryProvider(create: (_) => GroupRepository()),
+        RepositoryProvider(create: (_) => EventRepository()),
+        RepositoryProvider(create: (_) => RegistrationRepository()),
+        RepositoryProvider(create: (_) => PrayerRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -89,9 +80,7 @@ class JuGruppeApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [
-            const Locale('de')
-          ],
+          supportedLocales: [const Locale('de')],
         ),
       ),
     );

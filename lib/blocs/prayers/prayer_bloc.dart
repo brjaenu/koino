@@ -39,6 +39,8 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
       yield* _mapEventProcessPrayerStreamToState(event);
     } else if (event is EventFetchPrayers) {
       yield* _mapEventFetchPrayersToState();
+    } else if (event is EventPrayForPrayer) {
+      yield* _mapEventPrayForPrayerToState(event);
     }
   }
 
@@ -74,6 +76,24 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
       yield state.copyWith(
         status: PrayerStatus.error,
         failure: const Failure(message: 'Unable to load prayers'),
+      );
+    }
+  }
+
+  Stream<PrayerState> _mapEventPrayForPrayerToState(
+      EventPrayForPrayer event) async* {
+    if (event.prayerId == null || event.userId == null) {
+      return;
+    }
+    try {
+      await this
+          ._prayerRepository
+          .prayForPrayer(prayerId: event.prayerId, userId: event.userId);
+    } catch (err) {
+      print(err);
+      yield state.copyWith(
+        status: PrayerStatus.error,
+        failure: const Failure(message: 'Unable to pray for a prayer'),
       );
     }
   }

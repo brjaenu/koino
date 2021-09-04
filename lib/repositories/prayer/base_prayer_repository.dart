@@ -10,6 +10,7 @@ abstract class BasePrayerRepository {
     String title,
     String description,
     bool isAnonymous,
+    String username,
     String authorId,
     String groupId,
   });

@@ -41,6 +41,7 @@ class GroupRepository extends BaseGroupRepository {
       'owner': ownerId,
       'members': [userRef],
       'memberAmount': 1,
+      'creationTs': Timestamp.now(),
     });
     final doc = await groupRef.get();
     return doc.exists ? Group.fromDocument(doc) : null;

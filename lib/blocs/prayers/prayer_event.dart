@@ -21,3 +21,16 @@ class EventProcessPrayerStream extends PrayerEvent {
 }
 
 class EventFetchPrayers extends PrayerEvent {}
+
+class EventPrayForPrayer extends PrayerEvent {
+  final String prayerId;
+  final String userId;
+
+  EventPrayForPrayer({
+    @required this.prayerId,
+    @required this.userId,
+  });
+
+  @override
+  List<Object> get props => [prayerId, userId];
+}

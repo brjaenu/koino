@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koino/blocs/blocs.dart';
+import 'package:koino/blocs/prayers/prayer_bloc.dart';
 import 'package:koino/config/custom_router.dart';
 import 'package:koino/enums/bottom_nav_item.dart';
 import 'package:koino/repositories/repositories.dart';
@@ -52,7 +53,13 @@ class TabNavigator extends StatelessWidget {
           child: AgendaScreen(),
         );
       case BottomNavItem.prayerwall:
-        return PrayerwallScreen();
+        return BlocProvider(
+          create: (context) => PrayerBloc(
+            prayerRepository: context.read<PrayerRepository>(),
+            userBloc: context.read<UserBloc>(),
+          )..add(EventCreatePrayerStream()),
+          child: PrayerwallScreen(),
+        );
       case BottomNavItem.group:
         return ManageGroupScreen();
       default:

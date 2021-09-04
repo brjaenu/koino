@@ -45,7 +45,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
           appBar: CustomAppBar(
             title: "AGENDA",
           ),
-          body: _buildBody(state),
+          body: _buildBody(state, context),
           floatingActionButton: isUserAdmin
               ? FloatingActionButton(
                   child: Icon(Icons.add),
@@ -57,7 +57,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
     );
   }
 
-  Widget _buildBody(EventState state) {
+  Widget _buildBody(EventState state, BuildContext context) {
     switch (state.status) {
       case EventStatus.loading:
         return const Center(child: CircularProgressIndicator());

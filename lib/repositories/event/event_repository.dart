@@ -83,7 +83,8 @@ class EventRepository extends BaseEventRepository {
       'groupId': groupId,
       'author': userRef,
       'registeredUsers': [],
-      'registrationAmount': 0
+      'registrationAmount': 0,
+      'creationTs': Timestamp.now(),
     });
     final doc = await eventRef.get();
     return doc.exists ? Event.fromDocument(doc) : null;

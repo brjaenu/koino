@@ -49,6 +49,7 @@ class PrayerRepository extends BasePrayerRepository {
     String title,
     String description,
     bool isAnonymous,
+    String username,
     String authorId,
     String groupId,
   }) async {
@@ -60,7 +61,8 @@ class PrayerRepository extends BasePrayerRepository {
       'groupId': groupId,
       'author': userRef,
       'registeredUsers': [],
-      'registrationAmount': 0
+      'registrationAmount': 0,
+      'creationTs': Timestamp.now(),
     });
     final doc = await prayerRef.get();
     return doc.exists ? Prayer.fromDocument(doc) : null;
