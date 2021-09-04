@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:koino/repositories/auth/auth_repository.dart';
 import 'package:koino/screens/login/cubit/login_cubit.dart';
 import 'package:koino/screens/screens.dart';
@@ -27,6 +28,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
@@ -43,94 +46,100 @@ class LoginScreen extends StatelessWidget {
           },
           builder: (context, state) {
             return Scaffold(
-              body: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Card(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text(
-                              'JuGruppe',
-                              style: TextStyle(
-                                fontSize: 28.0,
-                                fontWeight: FontWeight.bold,
+              body: SingleChildScrollView(
+                child: SizedBox(
+                  height: height,
+                  child: Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          const SizedBox(height: 50.0),
+                          Text(
+                            'WILLKOMMEN BEI KOINO',
+                            style: Theme.of(context).textTheme.headline1,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 50.0),
+                          Text(
+                            'Melde dich an, um forzufahren',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          const SizedBox(height: 25.0),
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            decoration: InputDecoration(
+                              hintText: 'EMAIL',
+                              prefixIcon: Icon(
+                                FontAwesomeIcons.solidEnvelope,
+                                color: Theme.of(context).iconTheme.color,
+                                size: 20.0,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 12.0),
-                            TextFormField(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              decoration: InputDecoration(hintText: 'E-Mail'),
-                              textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.emailAddress,
-                              focusNode: _emailFocusNode,
-                              onChanged: (value) => context
-                                  .read<LoginCubit>()
-                                  .emailChanged(value),
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter a email.';
-                                }
-                                if (!EmailValidator.validate(value)) {
-                                  return 'Please enter a valid email.';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 12.0),
-                            TextFormField(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              obscureText: true,
-                              decoration: InputDecoration(hintText: 'Password'),
-                              onChanged: (value) => context
-                                  .read<LoginCubit>()
-                                  .passwordChanged(value),
-                              textInputAction: TextInputAction.done,
-                              keyboardType: TextInputType.text,
-                              focusNode: _passwordFocusNode,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter a password.';
-                                }
-                                if (value.toString().length < 8) {
-                                  return 'Please enter a password greater than 7 characters.';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 28.0),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                elevation: 1.0,
-                                primary: Theme.of(context).primaryColor,
-                                onPrimary: Colors.white,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.emailAddress,
+                            focusNode: _emailFocusNode,
+                            onChanged: (value) =>
+                                context.read<LoginCubit>().emailChanged(value),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter a email.';
+                              }
+                              if (!EmailValidator.validate(value)) {
+                                return 'Please enter a valid email.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 25.0),
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: 'PASSWORT',
+                              prefixIcon: Icon(
+                                FontAwesomeIcons.lock,
+                                color: Theme.of(context).iconTheme.color,
+                                size: 20.0,
                               ),
-                              onPressed: () => _submitForm(context,
-                                  state.status == LoginStatus.submitting),
-                              child: Text('Login'),
                             ),
-                            const SizedBox(height: 12.0),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 1.0,
-                                  primary: Colors.grey[200],
-                                  onPrimary: Colors.black),
-                              onPressed: () => Navigator.of(context)
-                                  .pushNamed(SignupScreen.routeName),
-                              child: Text('No account? Sign up'),
-                            ),
-                          ],
-                        ),
+                            onChanged: (value) => context
+                                .read<LoginCubit>()
+                                .passwordChanged(value),
+                            textInputAction: TextInputAction.done,
+                            keyboardType: TextInputType.text,
+                            focusNode: _passwordFocusNode,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter a password.';
+                              }
+                              if (value.toString().length < 8) {
+                                return 'Please enter a password greater than 7 characters.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 25.0),
+                          ElevatedButton(
+                            onPressed: () => _submitForm(context,
+                                state.status == LoginStatus.submitting),
+                            child: Text('ANMELDEN'),
+                          ),
+                          Expanded(child: Container()),
+                          TextButton(
+                            onPressed: () => Navigator.of(context)
+                                .pushNamed(SignupScreen.routeName),
+                            child: Text(
+                                'Hast du noch kein Account? Jetzt registrieren.'),
+                          ),
+                          const SizedBox(height: 25.0),
+                        ],
                       ),
                     ),
                   ),

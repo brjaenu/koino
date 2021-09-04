@@ -23,146 +23,141 @@ class UpcomingEventCard extends StatelessWidget {
     bool isRegistered =
         event.registeredUsers.where((r) => r == userId).toList().length > 0;
     var dateWidget = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
           children: [
             Text(
-              DateFormat('MMMM').format(event.date.toDate()),
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              DateFormat('MMM').format(event.date.toDate()).toUpperCase(),
+              style: Theme.of(context).accentTextTheme.headline3,
               textAlign: TextAlign.center,
             ),
-            SizedBox(width: 8.0),
             Text(
               DateFormat('dd').format(event.date.toDate()),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: Theme.of(context).accentTextTheme.headline3,
               textAlign: TextAlign.center,
             ),
           ],
         ),
-        SizedBox(width: 8.0),
         Text(
           DateFormat('HH:mm').format(event.date.toDate()),
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            fontSize: 20.0,
-          ),
+          style: Theme.of(context).accentTextTheme.headline3,
           textAlign: TextAlign.center,
         ),
       ],
     );
 
-    //AspectRatio(              aspectRatio: 1,
-    return Card(
-      margin: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+    var speakerWidget = event.speaker != ""
+        ? Row(
+            children: [
+              Icon(
+                Icons.speaker_notes,
+                color: Colors.white,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              SizedBox(width: 10.0),
+              Text(
+                event.speaker,
+                style: Theme.of(context).accentTextTheme.bodyText1,
+              ),
+            ],
+          )
+        : Container();
+
+    var titleWidget = Text(
+      event.title,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 2,
+      style: Theme.of(context).accentTextTheme.headline3,
+    );
+    var descriptionWidget = Text(
+      event.description,
+      style: Theme.of(context).accentTextTheme.bodyText1,
+    );
+    var registeredBubblesWidget = CircleAvatar(
+      maxRadius: 15.0,
+      backgroundColor: Theme.of(context).primaryColor,
+      child: Text(
+        "+" + event.registrationAmount.toString(),
+        style: Theme.of(context).accentTextTheme.bodyText1.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+    );
+
+    return BlocConsumer<RegisterEventCubit, RegisterEventState>(
+      listener: (context, state) {
+        if (state.status == RegisterEventStatus.error) {
+          showDialog(
+            context: context,
+            builder: (context) => ErrorDialog(content: state.failure.message),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Card(
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).accentColor,
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        titleWidget,
+                                        SizedBox(height: 10.0),
+                                        speakerWidget,
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                dateWidget,
+                              ],
+                            ),
+                            SizedBox(height: 10.0),
+                            descriptionWidget,
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(
-                          child: Container(
-                            child: Text(
-                              event.title,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                        dateWidget,
+                        registeredBubblesWidget,
+                        _buildRegistrationButton(context, isRegistered, state),
                       ],
-                    ),
-                    SizedBox(height: 16.0),
-                    Text(
-                      event.description,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 16.0),
-                    event.speaker != ""
-                        ? Row(
-                            children: [
-                              Icon(
-                                Icons.speaker_notes,
-                                color: Colors.white,
-                              ),
-                              SizedBox(width: 8.0),
-                              Text(
-                                event.speaker,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          )
-                        : SizedBox(),
+                    )
                   ],
                 ),
               ),
-            ),
-            SizedBox(height: 14.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: BlocConsumer<RegisterEventCubit, RegisterEventState>(
-                listener: (context, state) {
-                  if (state.status == RegisterEventStatus.error) {
-                    showDialog(
-                      context: context,
-                      builder: (context) =>
-                          ErrorDialog(content: state.failure.message),
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          buildBookmarkIfRegistered(
-                              context, isRegistered, state),
-                          Text(
-                            event.registrationAmount.toString() + " Angemeldet",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      _buildRegistrationButton(context, isRegistered, state),
-                    ],
-                  );
-                },
+              Positioned(
+                top: 0,
+                right: 10.0,
+                child: buildBookmarkIfRegistered(context, isRegistered, state),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -176,7 +171,7 @@ class UpcomingEventCard extends StatelessWidget {
         onPressed: () => _unregister(
             ctx, event.id, state.status == RegisterEventStatus.submitting),
         child: Text(
-          'Unregister',
+          'Abmelden',
           style: TextStyle(color: Colors.black54),
         ),
         style: ElevatedButton.styleFrom(
@@ -193,7 +188,7 @@ class UpcomingEventCard extends StatelessWidget {
       onPressed: () => _register(
           ctx, event.id, state.status == RegisterEventStatus.submitting),
       child: Text(
-        'Join Event',
+        'Anmelden',
         style: TextStyle(color: Colors.black54),
       ),
       style: ElevatedButton.styleFrom(
@@ -240,14 +235,15 @@ class UpcomingEventCard extends StatelessWidget {
         children: [
           FaIcon(
             FontAwesomeIcons.solidBookmark,
-            color: Colors.amber,
+            color: Theme.of(context).primaryColor,
+            size: 40.0,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 4.0),
+            padding: const EdgeInsets.only(top: 10.0),
             child: FaIcon(
               FontAwesomeIcons.solidStar,
               color: Colors.white,
-              size: 12.0,
+              size: 15.0,
             ),
           ),
         ],

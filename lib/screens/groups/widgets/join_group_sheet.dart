@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/models/models.dart';
 import 'package:koino/screens/groups/cubit/join_group_cubit.dart';
@@ -36,7 +37,7 @@ class JoinGroupSheet extends StatelessWidget {
               children: [
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.fromLTRB(25, 12, 25, 25),
                     child: Form(
                       key: this._formKey,
                       child: Column(
@@ -45,7 +46,14 @@ class JoinGroupSheet extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ListTile(
-                            title: Center(child: Text('GRUPPE BEITRETEN')),
+                            title: Center(
+                                child: Text(
+                              'GRUPPE HINZUFÜGEN',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3
+                                  .copyWith(fontWeight: FontWeight.normal),
+                            )),
                             leading: Text(''),
                             contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                             trailing: Material(
@@ -57,11 +65,18 @@ class JoinGroupSheet extends StatelessWidget {
                                   child: Icon(Icons.close)),
                             ),
                           ),
-                          const SizedBox(height: 12.0),
+                          const SizedBox(height: 25.0),
                           TextFormField(
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            decoration: InputDecoration(hintText: 'Name'),
+                            decoration: InputDecoration(
+                              hintText: 'GRUPPENNAME',
+                              prefixIcon: Icon(
+                                FontAwesomeIcons.userFriends,
+                                color: Theme.of(context).iconTheme.color,
+                                size: 20.0,
+                              ),
+                            ),
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.name,
                             focusNode: _nameFocusNode,
@@ -78,12 +93,18 @@ class JoinGroupSheet extends StatelessWidget {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 12.0),
+                          const SizedBox(height: 25.0),
                           TextFormField(
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            decoration:
-                                InputDecoration(hintText: 'Activation code'),
+                            decoration: InputDecoration(
+                              hintText: 'AKTIVIERUNGSCODE',
+                              prefixIcon: Icon(
+                                FontAwesomeIcons.lock,
+                                color: Theme.of(context).iconTheme.color,
+                                size: 20.0,
+                              ),
+                            ),
                             onChanged: (value) => context
                                 .read<JoinGroupCubit>()
                                 .activationCodeChanged(value),
@@ -100,16 +121,11 @@ class JoinGroupSheet extends StatelessWidget {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 28.0),
+                          const SizedBox(height: 25.0),
                           ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 1.0,
-                              primary: Theme.of(context).primaryColor,
-                              onPrimary: Colors.white,
-                            ),
                             onPressed: () => _submitForm(context,
                                 state.status == JoinGroupStatus.submitting),
-                            child: Text('Join group'),
+                            child: Text('HINZUFÜGEN'),
                           ),
                         ],
                       ),

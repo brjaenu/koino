@@ -23,7 +23,7 @@ class EventCard extends StatelessWidget {
     bool isRegistered =
         event.registeredUsers.where((r) => r == userId).toList().length > 0;
 
-    var eventCard = BlocConsumer<RegisterEventCubit, RegisterEventState>(
+    return BlocConsumer<RegisterEventCubit, RegisterEventState>(
       listener: (context, state) {
         if (state.status == RegisterEventStatus.error) {
           showDialog(
@@ -34,75 +34,101 @@ class EventCard extends StatelessWidget {
       },
       builder: (context, state) {
         return Card(
-          margin: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
                   children: [
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              DateFormat('MMMM').format(event.date.toDate()),
-                              style: TextStyle(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          height: 80.0,
+                          width: 80.0,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).accentColor,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(16.0)),
+                          ),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  DateFormat('MMM')
+                                      .format(event.date.toDate())
+                                      .toUpperCase(),
+                                  style: Theme.of(context)
+                                      .accentTextTheme
+                                      .headline3,
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  DateFormat('dd').format(event.date.toDate()),
+                                  style: Theme.of(context)
+                                      .accentTextTheme
+                                      .headline3,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  event.title,
+                                  style: Theme.of(context).textTheme.headline4,
+                                  textAlign: TextAlign.left,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  event.description,
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 3,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CircleAvatar(
+                          maxRadius: 15.0,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: Text(
+                            "+" + event.registrationAmount.toString(),
+                            style: Theme.of(context)
+                                .accentTextTheme
+                                .bodyText1
+                                .copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              DateFormat('dd').format(event.date.toDate()),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 28.0,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                                ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              event.title,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                              event.description,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    _buildRegistrationButton(context, isRegistered, state),
+                        _buildRegistrationButton(context, isRegistered, state),
+                      ],
+                    )
                   ],
                 ),
               ),
               Positioned(
                 top: 0,
-                right: 0,
+                right: 10.0,
                 child: buildBookmarkIfRegistered(context, isRegistered, state),
               ),
             ],
@@ -110,7 +136,6 @@ class EventCard extends StatelessWidget {
         );
       },
     );
-    return eventCard;
   }
 
   Widget _buildRegistrationButton(
@@ -123,7 +148,7 @@ class EventCard extends StatelessWidget {
         onPressed: () => _unregister(
             ctx, event.id, state.status == RegisterEventStatus.submitting),
         child: Text(
-          'Unregister',
+          'Abmelden',
           style: TextStyle(color: Colors.black54),
         ),
         style: ElevatedButton.styleFrom(
@@ -140,7 +165,7 @@ class EventCard extends StatelessWidget {
       onPressed: () => _register(
           ctx, event.id, state.status == RegisterEventStatus.submitting),
       child: Text(
-        'Join',
+        'Anmelden',
         style: TextStyle(color: Colors.black54),
       ),
       style: ElevatedButton.styleFrom(
@@ -186,14 +211,15 @@ class EventCard extends StatelessWidget {
         children: [
           FaIcon(
             FontAwesomeIcons.solidBookmark,
-            color: Colors.amber,
+            color: Theme.of(context).primaryColor,
+            size: 40.0,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 4.0),
+            padding: const EdgeInsets.only(top: 10.0),
             child: FaIcon(
               FontAwesomeIcons.solidStar,
               color: Colors.white,
-              size: 12.0,
+              size: 15.0,
             ),
           ),
         ],

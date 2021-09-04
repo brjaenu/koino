@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/enums/enums.dart';
 import 'package:koino/repositories/group/group_repository.dart';
@@ -35,15 +36,13 @@ class NavScreen extends StatelessWidget {
   final Map<BottomNavItem, GlobalKey<NavigatorState>> navigatorKeys = {
     BottomNavItem.agenda: GlobalKey<NavigatorState>(),
     BottomNavItem.prayerwall: GlobalKey<NavigatorState>(),
-    BottomNavItem.group: GlobalKey<NavigatorState>(),
-    BottomNavItem.profile: GlobalKey<NavigatorState>()
+    BottomNavItem.group: GlobalKey<NavigatorState>()
   };
 
   final Map<BottomNavItem, IconData> items = const {
-    BottomNavItem.agenda: Icons.home,
-    BottomNavItem.prayerwall: Icons.book,
-    BottomNavItem.group: Icons.group,
-    BottomNavItem.profile: Icons.person
+    BottomNavItem.agenda: FontAwesomeIcons.calendarAlt,
+    BottomNavItem.prayerwall: FontAwesomeIcons.pray,
+    BottomNavItem.group: FontAwesomeIcons.userFriends,
   };
 
   @override

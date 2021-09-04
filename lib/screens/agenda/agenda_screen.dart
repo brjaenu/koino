@@ -43,7 +43,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: CustomAppBar(
-            title: activeGroup.name,
+            title: "AGENDA",
           ),
           body: _buildBody(state),
           floatingActionButton: isUserAdmin
@@ -91,7 +91,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
                   })
               : Stack(
                   children: <Widget>[
-                    Center(child: Text('No events available')),
+                    Center(child: Text('Deine Gruppe hat im Moment keine Events.')),
                     ListView()
                   ],
                 ),

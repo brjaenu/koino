@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/models/models.dart';
 import 'package:koino/repositories/group/group_repository.dart';
@@ -42,11 +43,11 @@ class CreateGroupScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('GRUPPE - ERSTELLEN'),
+              title: Text('GRUPPE ERSTELLEN'),
             ),
             body: Center(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(25.0),
                 child: ListView(
                   children: [
                     Form(
@@ -56,11 +57,18 @@ class CreateGroupScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const SizedBox(height: 12.0),
+                          const SizedBox(height: 25.0),
                           TextFormField(
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            decoration: InputDecoration(hintText: 'Name'),
+                            decoration: InputDecoration(
+                              hintText: 'GRUPPENNAME',
+                              prefixIcon: Icon(
+                                FontAwesomeIcons.userFriends,
+                                color: Theme.of(context).iconTheme.color,
+                                size: 20.0,
+                              ),
+                            ),
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.name,
                             focusNode: _nameFocusNode,
@@ -77,12 +85,18 @@ class CreateGroupScreen extends StatelessWidget {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 12.0),
+                          const SizedBox(height: 25.0),
                           TextFormField(
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            decoration:
-                                InputDecoration(hintText: 'Activation code'),
+                            decoration: InputDecoration(
+                              hintText: 'AKTIVIERUNGSCODE',
+                              prefixIcon: Icon(
+                                FontAwesomeIcons.lock,
+                                color: Theme.of(context).iconTheme.color,
+                                size: 20.0,
+                              ),
+                            ),
                             onChanged: (value) => context
                                 .read<CreateGroupCubit>()
                                 .activationCodeChanged(value),
@@ -99,16 +113,11 @@ class CreateGroupScreen extends StatelessWidget {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 28.0),
+                          const SizedBox(height: 25.0),
                           ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 1.0,
-                              primary: Theme.of(context).primaryColor,
-                              onPrimary: Colors.white,
-                            ),
                             onPressed: () => _submitForm(context,
                                 state.status == CreateGroupStatus.submitting),
-                            child: Text('Create group'),
+                            child: Text('ERSTELLEN'),
                           ),
                         ],
                       ),

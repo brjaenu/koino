@@ -30,7 +30,7 @@ class GroupsScreen extends StatelessWidget {
       onWillPop: () async => _popGroupsRoute(context),
       child: Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('GRUPPEN AUSWAHL')),
+          title: Text('GRUPPEN'),
         ),
         body: _buildGroupList(groups, context),
         floatingActionButton: CustomFABGroup(icons: icons),
@@ -40,13 +40,18 @@ class GroupsScreen extends StatelessWidget {
 
   Widget _buildGroupList(List<Group> groups, BuildContext context) {
     if (groups == null || groups.isEmpty) {
-      return Center(child: Text('No groups added yet.'));
+      return Center(
+          child: Text(
+              'Du hast noch keine Gruppe erstellt oder bist noch keiner beigetreten.'));
     }
 
     return ListView.separated(
       itemBuilder: (ctx, i) {
         return ListTile(
-          title: Text(groups[i].name),
+          title: Text(
+            groups[i].name,
+            style: Theme.of(context).accentTextTheme.subtitle1,
+          ),
           trailing: Icon(Icons.keyboard_arrow_right_outlined),
           onTap: () {
             context

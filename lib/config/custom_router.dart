@@ -35,6 +35,8 @@ class CustomRouter {
         return CreateGroupScreen.route();
       case CreateEventScreen.routeName:
         return CreateEventScreen.route();
+      case ProfileScreen.routeName:
+        return ProfileScreen.route();
       default:
         return _errorRoute();
     }

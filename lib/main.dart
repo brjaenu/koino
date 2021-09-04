@@ -12,6 +12,7 @@ import 'package:koino/repositories/group/group_repository.dart';
 import 'package:koino/repositories/repositories.dart';
 import 'package:koino/screens/splash_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:koino/util/CustomTheme.dart';
 
 import 'blocs/auth/auth_bloc.dart';
 
@@ -77,23 +78,8 @@ class JuGruppeApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          title: 'Jugruppe',
-          theme: ThemeData(
-              primarySwatch: Colors.blue,
-              scaffoldBackgroundColor: Colors.grey[50],
-              appBarTheme: AppBarTheme(
-                brightness: Brightness.light,
-                color: Colors.white,
-                iconTheme: const IconThemeData(color: Colors.black),
-                textTheme: const TextTheme(
-                  headline6: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              visualDensity: VisualDensity.adaptivePlatformDensity),
+          title: 'Koino',
+          theme: CustomTheme.lightTheme,
           onGenerateRoute: CustomRouter.onGenerateRoute,
           initialRoute: SplashScreen.routeName,
           debugShowCheckedModeBanner: false,
