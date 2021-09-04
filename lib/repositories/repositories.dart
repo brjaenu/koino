@@ -8,3 +8,5 @@ export 'event/base_event_repository.dart';
 export 'event/event_repository.dart';
 export 'registration/base_registration_repository.dart';
 export 'registration/registration_repository.dart';
+export 'prayer/base_prayer_repository.dart';
+export 'prayer/prayer_repository.dart';
