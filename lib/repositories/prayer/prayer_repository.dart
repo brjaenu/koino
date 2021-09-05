@@ -53,15 +53,14 @@ class PrayerRepository extends BasePrayerRepository {
     String authorId,
     String groupId,
   }) async {
-    final userRef = _firebaseFirestore.collection(Paths.USERS).doc(authorId);
     final prayerRef = await _firebaseFirestore.collection(Paths.PRAYERS).add({
       'title': title,
       'description': description,
       'isAnonymous': isAnonymous,
+      'username': username,
       'groupId': groupId,
-      'author': userRef,
-      'registeredUsers': [],
-      'registrationAmount': 0,
+      'authorId': authorId,
+      'prayerAmount': 0,
       'creationTs': Timestamp.now(),
     });
     final doc = await prayerRef.get();

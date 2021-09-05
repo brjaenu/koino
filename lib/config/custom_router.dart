@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:koino/screens/create_event/create_event_screen.dart';
+import 'package:koino/screens/create_prayer/create_prayer_screen.dart';
 import 'package:koino/screens/groups/groups_screen.dart';
 import 'package:koino/screens/login/login_screen.dart';
 import 'package:koino/screens/nav/nav_screen.dart';
@@ -35,6 +36,8 @@ class CustomRouter {
         return CreateGroupScreen.route();
       case CreateEventScreen.routeName:
         return CreateEventScreen.route();
+      case CreatePrayerScreen.routeName:
+        return CreatePrayerScreen.route();
       case ProfileScreen.routeName:
         return ProfileScreen.route();
       default:

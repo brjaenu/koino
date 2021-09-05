@@ -33,8 +33,6 @@ class _PrayerCardState extends State<PrayerCard>
 
   @override
   Widget build(BuildContext context) {
-    final userId = context.read<UserBloc>().state.user.id;
-
     return Card(
       child: Stack(
         children: [

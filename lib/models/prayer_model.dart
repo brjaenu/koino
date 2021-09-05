@@ -9,14 +9,14 @@ class Prayer extends Equatable {
   final String groupId;
   final String authorId;
   final String username;
-  final int prayedAmount;
+  final int prayerAmount;
   final bool isAnonymous;
 
   const Prayer({
     @required this.id,
     @required this.title,
     @required this.description,
-    @required this.prayedAmount,
+    @required this.prayerAmount,
     @required this.isAnonymous,
     @required this.username,
     @required this.groupId,
@@ -27,7 +27,7 @@ class Prayer extends Equatable {
     id: '',
     title: '',
     description: '',
-    prayedAmount: 0,
+    prayerAmount: 0,
     isAnonymous: false,
     username: '',
     authorId: '',
@@ -39,7 +39,7 @@ class Prayer extends Equatable {
       'title': this.title,
       'description': this.description,
       'isAnonymous': this.isAnonymous,
-      'prayedAmount': this.prayedAmount,
+      'prayerAmount': this.prayerAmount,
       'username': this.username,
       'authorId': this.authorId,
       'groupId': groupId,
@@ -55,7 +55,7 @@ class Prayer extends Equatable {
       title: data['title'] ?? '',
       description: data['description'] ?? '',
       isAnonymous: data['isAnonymous'] ?? false,
-      prayedAmount: data['prayedAmount'] ?? 0,
+      prayerAmount: data['prayerAmount'] ?? 0,
       username: data['username'] ?? '',
       authorId: data['authorId'] ?? '',
       groupId: data['groupId'] ?? '',
@@ -64,7 +64,7 @@ class Prayer extends Equatable {
 
   @override
   List<Object> get props =>
-      [id, title, description, isAnonymous, prayedAmount, authorId, groupId];
+      [id, title, description, isAnonymous, prayerAmount, authorId, groupId];
 
   Prayer copyWith({
     String id,
@@ -73,7 +73,7 @@ class Prayer extends Equatable {
     String groupId,
     String authorId,
     String username,
-    int prayedAmount,
+    int prayerAmount,
     bool isAnonymous,
   }) {
     return Prayer(
@@ -82,7 +82,7 @@ class Prayer extends Equatable {
         description: description ?? this.description,
         groupId: groupId ?? this.groupId,
         authorId: authorId ?? this.authorId,
-        prayedAmount: prayedAmount ?? this.prayedAmount,
+        prayerAmount: prayerAmount ?? this.prayerAmount,
         isAnonymous: isAnonymous ?? this.isAnonymous,
         username: username);
   }

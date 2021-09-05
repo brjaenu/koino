@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:koino/blocs/prayers/prayer_bloc.dart';
-
-import 'package:koino/blocs/user/user_bloc.dart';
+import 'package:koino/screens/create_prayer/create_prayer_screen.dart';
+import 'package:koino/screens/nav/cubit/bottom_nav_bar_cubit.dart';
 import 'package:koino/screens/nav/widgets/widgets.dart';
 import 'package:koino/screens/prayerwall/widgets/prayer_card.dart';
 import 'package:koino/widgets/error_dialog.dart';
@@ -28,10 +28,15 @@ class _PrayerwallScreenState extends State<PrayerwallScreen> {
       }
     }, builder: (context, state) {
       return Scaffold(
-          appBar: CustomAppBar(
-            title: 'PRAYERWALL',
-          ),
-          body: _buildBody(state, context));
+        appBar: CustomAppBar(
+          title: 'PRAYERWALL',
+        ),
+        body: _buildBody(state, context),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => _navigateCreatePrayerScreen(context),
+        ),
+      );
     });
   }
 
@@ -62,5 +67,10 @@ class _PrayerwallScreenState extends State<PrayerwallScreen> {
                 ),
         );
     }
+  }
+
+  void _navigateCreatePrayerScreen(BuildContext context) {
+    context.read<BottomNavBarCubit>().updateNavBarVisibility(isVisible: false);
+    Navigator.of(context).pushNamed(CreatePrayerScreen.routeName);
   }
 }

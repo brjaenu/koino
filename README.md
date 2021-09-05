@@ -1,6 +1,6 @@
-# jugruppe
+# koino
 
-A new Flutter project.
+An app for church youth groups to manage their events and prayers.
 
 ## Getting Started
 
