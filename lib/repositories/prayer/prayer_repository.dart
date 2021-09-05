@@ -66,4 +66,12 @@ class PrayerRepository extends BasePrayerRepository {
     final doc = await prayerRef.get();
     return doc.exists ? Prayer.fromDocument(doc) : null;
   }
+
+  @override
+  Future<void> removePrayer({String prayerId}) async {
+    return await _firebaseFirestore
+        .collection(Paths.PRAYERS)
+        .doc(prayerId)
+        .delete();
+  }
 }

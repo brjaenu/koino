@@ -41,6 +41,8 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
       yield* _mapEventFetchPrayersToState();
     } else if (event is EventPrayForPrayer) {
       yield* _mapEventPrayForPrayerToState(event);
+    } else if (event is EventDeletePrayer) {
+      yield* _mapEventDeletePrayerToState(event);
     }
   }
 
@@ -89,6 +91,26 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
       await this
           ._prayerRepository
           .prayForPrayer(prayerId: event.prayerId, userId: event.userId);
+    } catch (err) {
+      print(err);
+      yield state.copyWith(
+        status: PrayerStatus.error,
+        failure: const Failure(message: 'Unable to pray for a prayer'),
+      );
+    }
+  }
+
+  Stream<PrayerState> _mapEventDeletePrayerToState(
+      EventDeletePrayer event) async* {
+    if (event.prayerId == null ||
+        event.authorId == null ||
+        this._userBloc.state.user.id != event.authorId) {
+      return;
+    }
+    try {
+      await this
+          ._prayerRepository
+          .removePrayer(prayerId: event.prayerId);
     } catch (err) {
       print(err);
       yield state.copyWith(

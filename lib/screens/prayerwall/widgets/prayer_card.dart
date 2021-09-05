@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:koino/blocs/blocs.dart';
 import 'package:koino/blocs/prayers/prayer_bloc.dart';
 import 'package:koino/models/models.dart';
+import 'package:koino/util/CustomTheme.dart';
 
 class PrayerCard extends StatefulWidget {
   PrayerCard({
@@ -33,7 +34,13 @@ class _PrayerCardState extends State<PrayerCard>
 
   @override
   Widget build(BuildContext context) {
+    bool isAuthor =
+        widget.prayer.authorId == context.read<UserBloc>().state.user.id;
+
+    Color cardColor = isAuthor ? CustomColor.lightYellow : CustomColor.white;
+
     return Card(
+      color: cardColor,
       child: Stack(
         children: [
           Padding(
@@ -58,6 +65,7 @@ class _PrayerCardState extends State<PrayerCard>
                   widget.prayer.description,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
+                isAuthor ? _buildActionBar(context) : Container(),
               ],
             ),
           ),
@@ -111,5 +119,66 @@ class _PrayerCardState extends State<PrayerCard>
   void dispose() {
     super.dispose();
     _animationController.dispose();
+  }
+
+  Widget _buildActionBar(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextButton(
+          onPressed: () => showDeleteConfirmationDialog(context),
+          child: Row(
+            children: [
+              Icon(
+                FontAwesomeIcons.trashAlt,
+                color: CustomColor.red,
+              ),
+              SizedBox(width: 10.0),
+              Text(
+                'Löschen',
+                style: TextStyle(
+                  color: CustomColor.red,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  showDeleteConfirmationDialog(BuildContext context) {
+    final PrayerBloc prayerBloc = context.read<PrayerBloc>();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Bestätigung",
+            style: Theme.of(context).textTheme.headline3,
+          ),
+          content: Text(
+            "Möchtest du dein Gebetsanliegen wirklich löschen?",
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          actions: [
+            TextButton(
+                child: Text("Abbrechen"),
+                onPressed: () => Navigator.of(context).pop()),
+            TextButton(
+                child: Text("Löschen"),
+                onPressed: () => _deletePrayer(context, prayerBloc)),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deletePrayer(BuildContext context, PrayerBloc prayerBloc) async {
+    await prayerBloc
+      ..add(EventDeletePrayer(
+          authorId: widget.prayer.authorId, prayerId: widget.prayer.id));
+    Navigator.of(context).pop();
   }
 }

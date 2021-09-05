@@ -14,4 +14,6 @@ abstract class BasePrayerRepository {
     String authorId,
     String groupId,
   });
+
+  Future<void> removePrayer({String prayerId});
 }

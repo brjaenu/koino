@@ -34,3 +34,16 @@ class EventPrayForPrayer extends PrayerEvent {
   @override
   List<Object> get props => [prayerId, userId];
 }
+
+class EventDeletePrayer extends PrayerEvent {
+  final String prayerId;
+  final String authorId;
+
+  EventDeletePrayer({
+    @required this.prayerId,
+    @required this.authorId,
+  });
+
+  @override
+  List<Object> get props => [prayerId, authorId];
+}
