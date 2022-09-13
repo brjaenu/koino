@@ -57,7 +57,7 @@ class UpcomingEventCard extends StatelessWidget {
               SizedBox(width: 10.0),
               Text(
                 event.speaker,
-                style: Theme.of(context).accentTextTheme.bodyText1,
+                style: Theme.of(context).accentTextTheme.bodyText1.copyWith(fontSize: 16),
               ),
             ],
           )
@@ -71,7 +71,8 @@ class UpcomingEventCard extends StatelessWidget {
     );
     var descriptionWidget = Text(
       event.description,
-      style: Theme.of(context).accentTextTheme.bodyText1,
+      style: Theme.of(context).accentTextTheme.bodyText1.copyWith(fontSize: 16),
+      
     );
     var registeredBubblesWidget = CircleAvatar(
       maxRadius: 15.0,

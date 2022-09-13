@@ -1,5 +1,5 @@
 name: koino
-description: An app for church-groups to manage events and prayers.
+description: An app for christian youth-groups to organize their events.
 publish_to: 'none' 
 version: 2.0.0+1
 environment:
